@@ -13,8 +13,7 @@ import java.util.LinkedHashMap;
 
 public class SpriteView extends SurfaceView {
 
-    public LinkedHashMap<String, SpriteEntity> entity;
-    public LinkedHashMap<String, SpriteEntity> render;
+    public LinkedHashMap<String, SpriteController> controllerMap;
     public volatile boolean touched = false;
     public volatile float xTouchedPos;
     public volatile float yTouchedPos;
@@ -42,24 +41,19 @@ public class SpriteView extends SurfaceView {
 
     }
 
-    public LinkedHashMap<String, SpriteEntity> getEntity() { return this.entity; }
-    public void setEntity(LinkedHashMap<String, SpriteEntity> entity) { this.entity = entity; }
-
-    public LinkedHashMap<String, SpriteEntity> getRender() { return this.render; }
-    public void setRender(LinkedHashMap<String, SpriteEntity> render) { this.render = render; }
+    public LinkedHashMap<String, SpriteController> getControllerMap() { return this.controllerMap; }
+    public void setControllerMap(LinkedHashMap<String, SpriteController> controllerMap) { this.controllerMap = controllerMap; }
 
     public SpriteThread getSpriteThread() { return this.spriteThread; }
     public void setSpriteThread(SpriteThread spriteThread) { this.spriteThread = spriteThread; }
 
     public int getFrameRate() {
-        if(entity != null) {
-            for (LinkedHashMap.Entry<String, SpriteEntity> entry : entity.entrySet()) {
-                if (entry.getValue() != null) {
-                    return entry.getValue().getFrameRate();
-                }
+        if(controllerMap != null) {
+            for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
+                return entry.getValue().getFrameRate();
             }
         }
-        return 1000;
+        return 35;
     }
 
     private void initView(){
@@ -95,19 +89,22 @@ public class SpriteView extends SurfaceView {
                 canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
 
                 /* render scene */
-                for (LinkedHashMap.Entry<String, SpriteEntity> entry : render.entrySet()) {
-                    if (entry != null) {
-                        if (entry.getValue().getMessage() != null) {
-                            Sprite sprite = entry.getValue().getSprite();
-                            canvas.drawText(entry.getValue().getMessage(), (float)sprite.getXPos(), (float)sprite.getYPos(), null);
-                        }
-                        else {
-                            Sprite sprite = entry.getValue().getSprite();
-                            RectF rectF = new RectF();
-                            rectF.set((int) sprite.getXPos(), (int) sprite.getYPos(), (int) sprite.getXPos() + sprite.getSpriteWidth(), (int) sprite.getYPos() + sprite.getSpriteHeight());
-                            sprite.setWhereToDraw(rectF);
-                            entry.getValue().getCurrentFrame(sprite);
-                            canvas.drawBitmap(sprite.getSpriteSheet(), sprite.getFrameToDraw(), sprite.getWhereToDraw(), null);
+                if(controllerMap != null) {
+                    for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
+                        SpriteController controller = entry.getValue();
+                        SpriteEntity entity = controller.getEntity();
+                        if(entity != null) {
+                            if (entity.getMessage() != null) {
+                                Sprite sprite = entity.getSprite();
+                                canvas.drawText(entity.getMessage(), (float) controller.getXPos(), (float) controller.getYPos(), null);
+                            } else {
+                                Sprite sprite = entity.getSprite();
+                                RectF rectF = new RectF();
+                                rectF.set((int) controller.getXPos(), (int) controller.getYPos(), (int) controller.getXPos() + sprite.getSpriteWidth(), (int) controller.getYPos() + sprite.getSpriteHeight());
+                                sprite.setWhereToDraw(rectF);
+                                entity.getCurrentFrame();
+                                canvas.drawBitmap(sprite.getSpriteSheet(), sprite.getFrameToDraw(), sprite.getWhereToDraw(), null);
+                            }
                         }
                     }
                 }
@@ -146,11 +143,11 @@ public class SpriteView extends SurfaceView {
                 break;
             default:
         }
-        if (entity != null && touched) {
-            for (LinkedHashMap.Entry<String, SpriteEntity> entry : render.entrySet()) {
-                if(entry != null) {
-                    System.out.println("Entry Frame Rate: " + entry.getValue().getFrameRate());
-                    entry.getValue().onTouchEvent(this, entry, entity, render, touched, xTouchedPos, yTouchedPos);
+        if (controllerMap != null && touched) {
+            for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
+                if(entry.getValue().getEntity() != null) {
+                    //System.out.println("Entry Frame Rate: " + entry.getValue().getFrameRate());
+                    entry.getValue().getEntity().onTouchEvent(this, entry, controllerMap, touched, xTouchedPos, yTouchedPos);
                 }
             }
         }

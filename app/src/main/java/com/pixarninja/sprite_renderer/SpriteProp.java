@@ -2,57 +2,87 @@ package com.pixarninja.sprite_renderer;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.RectF;
-
-import java.util.LinkedHashMap;
 
 public class SpriteProp extends SpriteEntity {
 
-    private Sprite prop;
-    private Sprite render;
-
+    int propID;
 
     public SpriteProp(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes, int propID,
-                        double xDelta, double yDelta, boolean isMoving, double xPos, double yPos,
-                        int xFrameCount, int yFrameCount, int frameCount, double xDimension, double yDimension,
-                        double left, double top, double right, double bottom, String method) {
+                      double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
+                      double xDimension, double yDimension, double spriteScale,
+                      double left, double top, double right, double bottom, String method) {
 
-        int frameWidth;
-        int frameHeight;
-        int spriteWidth;
-        int spriteHeight;
-        double frameScale;
+        this.res = res;
+        this.percentOfScreen = percentOfScreen;
+        this.width = width;
+        this.height = height;
+        this.xRes = xRes;
+        this.yRes = yRes;
+        this.propID = propID;
+        controller = new SpriteController();
+        controller.setXDelta(xDelta);
+        controller.setYDelta(yDelta);
+        controller.setXInit(xInit);
+        controller.setYInit(yInit);
+        controller.setXPos(xInit);
+        controller.setYPos(yInit);
+        this.xFrameCount = xFrameCount;
+        this.yFrameCount = yFrameCount;
+        this.frameCount = frameCount;
+        this.xDimension = xDimension;
+        this.yDimension = yDimension;
+        this.spriteScale = spriteScale;
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
+        this.method = method;
 
-        /* initialize sprites that will be rendered in the scene */
-        Bitmap propImage = decodeSampledBitmapFromResource(res, propID, xRes, yRes);
-        frameWidth = propImage.getWidth() / xFrameCount;
-        frameHeight = propImage.getHeight() / yFrameCount;
-        frameScale = height * percentOfScreen / frameHeight;
-        spriteWidth = (int)(frameWidth * frameScale);
-        spriteHeight = (int)(frameHeight * frameScale);
-        xPos = (width / 2) - (spriteWidth / 2);
-        yPos = (height / 2) - (spriteHeight / 2);
-        this.prop = new Sprite(xDelta, yDelta, isMoving, propImage, xPos, yPos, xFrameCount, yFrameCount, frameCount, frameScale, xDimension, yDimension, left, top, right, bottom, method);
-
-        updateView(prop, prop);
-        render = prop;
+        refreshCharacter("prop");
 
     }
 
     @Override
-    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteEntity> entry, LinkedHashMap<String, SpriteEntity> entity, LinkedHashMap<String, SpriteEntity> render, boolean touched, float xTouchedPos, float yTouchedPos) {
-        if(touched) {
-            if (render != null) {
-                RectF boundingBox = this.render.getBoundingBox();
-                if (xTouchedPos >= boundingBox.left && xTouchedPos <= boundingBox.right) {
-                    /* center of the sprite */
-                    if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
-                        updateView(this.render, prop);
-                        this.render = prop;
-                    }
-                }
-            }
+    public void refreshCharacter(String ID) {
+
+        int xSpriteRes;
+        int ySpriteRes;
+
+        if (render == null) {
+            render = new Sprite();
         }
+
+        switch (ID) {
+            default:
+                render.setID(ID);
+                render.setXDimension(xDimension);
+                render.setYDimension(yDimension);
+                render.setLeft(left);
+                render.setTop(top);
+                render.setRight(right);
+                render.setBottom(bottom);
+                render.setXFrameCount(xFrameCount);
+                render.setYFrameCount(yFrameCount);
+                render.setFrameCount(frameCount);
+                render.setMethod(method);
+                xSpriteRes = 2 * xRes / render.getXFrameCount();
+                ySpriteRes = 2 * yRes / render.getYFrameCount();
+                render.setSpriteSheet(decodeSampledBitmapFromResource(res, propID, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
+                render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
+                render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
+                render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
+                render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
+                render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
+                render.setXCurrentFrame(0);
+                render.setYCurrentFrame(0);
+                render.setCurrentFrame(0);
+                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
+                render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
+        }
+        controller.setEntity(this);
+        updateBoundingBox();
     }
 
 }

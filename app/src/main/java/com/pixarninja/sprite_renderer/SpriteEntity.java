@@ -5,23 +5,35 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.RectF;
-
 import java.util.LinkedHashMap;
 
 abstract class SpriteEntity {
 
-    protected long lastFrameChangeTime;
-    protected int frameLengthInMilliseconds;
-    protected Sprite render;
-    protected String message;
+    protected Resources res;
+    protected double percentOfScreen;
+    protected int xRes;
+    protected int yRes;
+    protected int width;
+    protected int height;
+    protected int xFrameCount;
+    protected int yFrameCount;
+    protected int frameCount;
+    protected double xDimension;
+    protected double yDimension;
+    protected double spriteScale;
+    protected double left;
+    protected double top;
+    protected double right;
+    protected double bottom;
+    protected String method;
 
+    protected String message;
     protected SpriteController controller;
+    protected Sprite render;
+    protected SpriteView spriteView;
 
     public Sprite getSprite() { return this.render; }
     public void setSprite(Sprite sprite) { this.render = sprite; }
-
-    public int getFrameRate() { return this.frameLengthInMilliseconds; }
-    public void setFrameRate(int frameLengthInMilliseconds) { this.frameLengthInMilliseconds = frameLengthInMilliseconds; }
 
     public String getMessage() { return this.message; }
     public void setMessage(String message) { this.message = message; }
@@ -69,33 +81,30 @@ abstract class SpriteEntity {
 
     }
 
-    public void updateView(Sprite before, Sprite after) {
+    public void refreshCharacter(String ID) {
+        render = new Sprite();
+    }
 
-        if(before != after) {
-            after.setXDelta(before.getXDelta());
-            after.setYDelta(before.getYDelta());
-            after.setIsMoving(before.getIsMoving());
-            after.setXPos(before.getXPos());
-            after.setYPos(before.getYPos());
-        }
-        after.setXCurrentFrame(0);
-        after.setYCurrentFrame(0);
-        after.setCurrentFrame(0);
-        updateBoundingBox(after);
+    public void updateView() {
+
+        controller.setXPos(controller.getXPos() + controller.getXDelta());
+        controller.setYPos(controller.getYPos() + controller.getYDelta());
+        getCurrentFrame();
+        updateBoundingBox();
 
     }
 
-    public void updateBoundingBox(Sprite sprite) {
+    public void updateBoundingBox() {
 
         /* find percentage to place from the center outwards */
-        float left = (float) (sprite.getXDimension() / 2 - sprite.getLeft()) / (float) sprite.getXDimension();
-        float top = (float) (sprite.getYDimension() / 2 - sprite.getTop()) / (float) sprite.getYDimension();
-        float right = (float) (sprite.getRight() - sprite.getXDimension() / 2) / (float) sprite.getXDimension();
-        float bottom = (float) (sprite.getBottom() - sprite.getYDimension() / 2) / (float) sprite.getYDimension();
+        float left = (float) (render.getXDimension() / 2 - render.getLeft()) / (float) render.getXDimension();
+        float top = (float) (render.getYDimension() / 2 - render.getTop()) / (float) render.getYDimension();
+        float right = (float) (render.getRight() - render.getXDimension() / 2) / (float) render.getXDimension();
+        float bottom = (float) (render.getBottom() - render.getYDimension() / 2) / (float) render.getYDimension();
 
         /* centerOfBoundingBox = centerOfSprite - centerOfScreen */
-        RectF position = sprite.getWhereToDraw();
-        sprite.setBoundingBox(new RectF(
+        RectF position = render.getWhereToDraw();
+        render.setBoundingBox(new RectF(
                 position.centerX() - (position.width() * left),
                 position.centerY() - (position.height() * top),
                 position.centerX() + (position.width() * right),
@@ -104,37 +113,35 @@ abstract class SpriteEntity {
 
     }
 
-    public void getCurrentFrame(Sprite sprite){
+    public void getCurrentFrame(){
 
         long time  = System.currentTimeMillis();
-        if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
+        if ( time > controller.getLastFrameChangeTime() + controller.getFrameRate()) {
 
-            lastFrameChangeTime = time;
-            sprite.setCurrentFrame(sprite.getCurrentFrame() + 1);
-            sprite.setXCurrentFrame(sprite.getXCurrentFrame() + 1);
-            if ((sprite.getXCurrentFrame() >= sprite.getXFrameCount()) || (sprite.getCurrentFrame() >= sprite.getFrameCount())) {
-                sprite.setYCurrentFrame(sprite.getYCurrentFrame() + 1);
-                if ((sprite.getYCurrentFrame() >= sprite.getYFrameCount()) || (sprite.getCurrentFrame() >= sprite.getFrameCount())) {
-                    sprite.setYCurrentFrame(0);
-                    sprite.setCurrentFrame(0);
-                    updateView(render, sprite);
-                    render = sprite;
+            controller.setLastFrameChangeTime(time);
+            render.setCurrentFrame(render.getCurrentFrame() + 1);
+            render.setXCurrentFrame(render.getXCurrentFrame() + 1);
+            if ((render.getXCurrentFrame() >= render.getXFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                render.setYCurrentFrame(render.getYCurrentFrame() + 1);
+                if ((render.getYCurrentFrame() >= render.getYFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                    render.setYCurrentFrame(0);
+                    render.setCurrentFrame(0);
                 }
-                sprite.setXCurrentFrame(0);
+                render.setXCurrentFrame(0);
             }
 
         }
 
         /* update the next frame from the spritesheet that will be drawn */
         Rect rect = new Rect();
-        rect.left = sprite.getXCurrentFrame() * sprite.getFrameWidth();
-        rect.right = rect.left + sprite.getFrameWidth();
-        rect.top = sprite.getYCurrentFrame() * sprite.getFrameHeight();
-        rect.bottom = rect.top + sprite.getFrameHeight();
-        sprite.setFrameToDraw(rect);
+        rect.left = render.getXCurrentFrame() * render.getFrameWidth();
+        rect.right = rect.left + render.getFrameWidth();
+        rect.top = render.getYCurrentFrame() * render.getFrameHeight();
+        rect.bottom = rect.top + render.getFrameHeight();
+        render.setFrameToDraw(rect);
 
     }
 
-    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteEntity> entry, LinkedHashMap<String, SpriteEntity> entity, LinkedHashMap<String, SpriteEntity> render, boolean touched, float xTouchedPos, float yTouchedPos) {}
+    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos) { }
 
 }

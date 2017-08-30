@@ -6,12 +6,8 @@ import android.graphics.RectF;
 
 public class Sprite {
 
-    private double xDelta;
-    private double yDelta;
-    private boolean isMoving;
+    private String ID;
     private Bitmap spriteSheet;
-    private double xPos;
-    private double yPos;
     private int xFrameCount;
     private int yFrameCount;
     private int frameCount;
@@ -37,144 +33,14 @@ public class Sprite {
 
     public Sprite() {}
 
-    public Sprite(Sprite reference) {
-
-        xDelta = reference.getXDelta();
-        yDelta = reference.getYDelta();
-        xPos = reference.getXPos();
-        yPos = reference.getYPos();
-        spriteSheet = reference.getSpriteSheet();
-        xFrameCount = reference.getXFrameCount();
-        yFrameCount = reference.getYFrameCount();
-        frameCount = reference.getFrameCount();
-        Bitmap spriteSheet = reference.getSpriteSheet();
-        frameWidth = spriteSheet.getWidth() / xFrameCount;
-        frameHeight = spriteSheet.getHeight() / yFrameCount;
-        frameScale = reference.getFrameScale();
-        xDimension = reference.getXDimension();
-        yDimension = reference.getYDimension();
-        spriteWidth = (int)(reference.getFrameWidth() * frameScale);
-        spriteHeight = (int)(reference.getFrameHeight() * frameScale);
-        xCurrentFrame = 0;
-        yCurrentFrame = 0;
-        currentFrame = 0;
-        frameToDraw = new Rect(0, 0, reference.getFrameWidth(), reference.getFrameHeight());
-        whereToDraw = new RectF((float)reference.getXPos(), (float)reference.getYPos(), (float)reference.getXPos() + reference.getSpriteWidth(), (float)reference.getYPos() + reference.getSpriteHeight());
-        this.left = reference.getLeft();
-        this.top = reference.getTop();
-        this.right = reference.getRight();
-        this.bottom = reference.getBottom();
-        boundingBox = reference.getBoundingBox();
-        method = reference.getMethod();
-
-    }
-
-    public Sprite(double xDelta, double yDelta, boolean isMoving, Bitmap spriteSheet, double xPos, double yPos, int xFrameCount, int yFrameCount, int frameCount, double frameScale, double xDimension, double yDimension, double left, double top, double right, double bottom, String method) {
-
-        this.xDelta = xDelta;
-        this.yDelta = yDelta;
-        this.isMoving = isMoving;
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.spriteSheet = spriteSheet;
-        this.xFrameCount = xFrameCount;
-        this.yFrameCount = yFrameCount;
-        this.frameCount = frameCount;
-        Bitmap reference = spriteSheet;
-        this.frameWidth = reference.getWidth() / xFrameCount;
-        this.frameHeight = reference.getHeight() / yFrameCount;
-        this.spriteWidth = (int)(frameWidth * frameScale);
-        this.spriteHeight = (int)(frameHeight * frameScale);
-        this.frameScale = frameScale;
-        this.xDimension = xDimension;
-        this.yDimension = yDimension;
-        this.xCurrentFrame = 0;
-        this.yCurrentFrame = 0;
-        this.currentFrame = 0;
-        this.frameToDraw = new Rect(0, 0, frameWidth, frameHeight);
-        this.whereToDraw = new RectF((float)xPos, (float)yPos, (float)xPos + spriteWidth, (float)yPos + spriteHeight);
-        this.left = left;
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
-        this.boundingBox = new RectF();
-        this.method = method;
-
-    }
-
-    public Sprite(double xDelta, double yDelta, boolean isMoving, Bitmap spriteSheet, double xPos, double yPos, double frameScale) {
-
-        this.xDelta = xDelta;
-        this.yDelta = yDelta;
-        this.isMoving = isMoving;
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.spriteSheet = spriteSheet;
-        this.xFrameCount = 1;
-        this.yFrameCount = 1;
-        this.frameCount = 1;
-        Bitmap reference = spriteSheet;
-        this.frameWidth = reference.getWidth() / xFrameCount;
-        this.frameHeight = reference.getHeight() / yFrameCount;
-        this.spriteWidth = (int)(frameWidth * frameScale);
-        this.spriteHeight = (int)(frameHeight * frameScale);
-        this.frameScale = frameScale;
-        this.xDimension = 1;
-        this.yDimension = 1;
-        this.xCurrentFrame = 0;
-        this.yCurrentFrame = 0;
-        this.currentFrame = 0;
-        this.frameToDraw = new Rect(0, 0, frameWidth, frameHeight);
-        this.whereToDraw = new RectF((float)xPos, (float)yPos, (float)xPos + spriteWidth, (float)yPos + spriteHeight);
-        this.left = 0;
-        this.top = 0;
-        this.right = 1;
-        this.bottom = 1;
-        this.boundingBox = new RectF();
-        this.method = null;
-
-    }
-
-    public double getXDelta() {
-        return this.xDelta;
-    }
-    public void setXDelta(double xDelta) {
-        this.xDelta = xDelta;
-    }
-
-    public double getYDelta() {
-        return this.yDelta;
-    }
-    public void setYDelta(double yDelta) {
-        this.yDelta = yDelta;
-    }
-
-    public boolean getIsMoving() {
-        return this.isMoving;
-    }
-    public void setIsMoving(boolean isMoving) {
-        this.isMoving = isMoving;
-    }
+    public String getID() { return this.ID; }
+    public void setID(String ID) { this.ID = ID; }
 
     public Bitmap getSpriteSheet() {
         return this.spriteSheet;
     }
     public void setSpriteSheet(Bitmap spriteSheet) {
         this.spriteSheet = spriteSheet;
-    }
-
-    public double getXPos() {
-        return this.xPos;
-    }
-    public void setXPos(double xPos) {
-        this.xPos = xPos;
-    }
-
-    public double getYPos() {
-        return this.yPos;
-    }
-    public void setYPos(double yPos) {
-        this.yPos = yPos;
     }
 
     public int getXFrameCount() {
@@ -306,6 +172,34 @@ public class Sprite {
     }
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public void spriteInfo() {
+
+        System.out.println("Info of sprite " + ID + ":");
+        System.out.println(" - sprite sheet: " + spriteSheet);
+        System.out.println(" - x dimension: " + xDimension);
+        System.out.println(" - y dimension: " + yDimension);
+        System.out.println(" - left: " + left);
+        System.out.println(" - top: " + top);
+        System.out.println(" - right: " + right);
+        System.out.println(" - bottom: " + bottom);
+        System.out.println(" - method: " + method);
+        System.out.println(" - current frame: " + currentFrame);
+        System.out.println(" - x current frame: " + xCurrentFrame);
+        System.out.println(" - y current frame: " + yCurrentFrame);
+        System.out.println(" - x frame count: " + xFrameCount);
+        System.out.println(" - y frame count: " + yFrameCount);
+        System.out.println(" - frame count: " + frameCount);
+        System.out.println(" - frame width: " + frameWidth);
+        System.out.println(" - frame height: " + frameHeight);
+        System.out.println(" - frame scale: " + frameScale);
+        System.out.println(" - bounding box: " + boundingBox);
+        System.out.println(" - sprite width: " + spriteWidth);
+        System.out.println(" - sprite height: " + spriteHeight);
+        System.out.println(" - frame to draw: " + frameToDraw);
+        System.out.println(" - where to draw: " + whereToDraw);
+
     }
 
 }

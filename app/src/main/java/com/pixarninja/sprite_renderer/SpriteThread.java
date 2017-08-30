@@ -18,7 +18,7 @@ public class SpriteThread extends Thread implements Runnable {
     public void run() {
         while(running){
 
-            if(spriteView.getEntity() != null) {
+            if(spriteView.getControllerMap() != null) {
                 spriteView.drawSprite();
             }
 
