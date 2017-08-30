@@ -7,12 +7,37 @@ import android.graphics.RectF;
 public class Background extends SpriteProp{
 
 
-    public Background(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes, int propID,
+    public Background(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
                             double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
                             double xDimension, double yDimension, double spriteScale,
                             double left, double top, double right, double bottom, String method) {
 
-        super(res, percentOfScreen, width, height, xRes, yRes, propID, xDelta, yDelta, xInit, yInit, xFrameCount, yFrameCount, frameCount, xDimension, yDimension, spriteScale, left, top, right, bottom, method);
+        super(res, percentOfScreen, width, height, xRes, yRes, xDelta, yDelta, xInit, yInit, xFrameCount, yFrameCount, frameCount, xDimension, yDimension, spriteScale, left, top, right, bottom, method);
+
+        this.res = res;
+        this.percentOfScreen = percentOfScreen;
+        this.width = width;
+        this.height = height;
+        this.xRes = xRes;
+        this.yRes = yRes;
+        controller = new SpriteController();
+        controller.setXDelta(xDelta);
+        controller.setYDelta(yDelta);
+        controller.setXInit(xInit);
+        controller.setYInit(yInit);
+        controller.setXPos(xInit);
+        controller.setYPos(yInit);
+        this.xFrameCount = xFrameCount;
+        this.yFrameCount = yFrameCount;
+        this.frameCount = frameCount;
+        this.xDimension = xDimension;
+        this.yDimension = yDimension;
+        this.spriteScale = spriteScale;
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
+        this.method = method;
 
         refreshCharacter("red");
 
@@ -43,7 +68,7 @@ public class Background extends SpriteProp{
                 render.setMethod("loop");
                 xSpriteRes = 2 * xRes / render.getXFrameCount();
                 ySpriteRes = 2 * yRes / render.getYFrameCount();
-                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.background_home, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
+                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.background_red, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
                 render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
                 render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
@@ -69,7 +94,7 @@ public class Background extends SpriteProp{
                 render.setMethod("loop");
                 xSpriteRes = 2 * xRes / render.getXFrameCount();
                 ySpriteRes = 2 * yRes / render.getYFrameCount();
-                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.background_creativemode, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
+                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.background_green, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
                 render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
                 render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
@@ -95,7 +120,7 @@ public class Background extends SpriteProp{
                 render.setMethod("loop");
                 xSpriteRes = 2 * xRes / render.getXFrameCount();
                 ySpriteRes = 2 * yRes / render.getYFrameCount();
-                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.background_leaderboard, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
+                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.background_blue, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
                 render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
                 render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());

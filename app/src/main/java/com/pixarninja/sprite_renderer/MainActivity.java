@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         spriteView = (SpriteView) findViewById(R.id.spriteView);
 
         /* background */
-        entity = new Background(getResources(), 1, width, height, (int)(maxRes * 0.4), (int)(maxRes * 0.4), R.mipmap.background_home,
+        entity = new Background(getResources(), 1, width, height, (int)(maxRes * 0.4), (int)(maxRes * 0.4),
                 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop");
         controllerMap.put("BackgroundController", entity.getController());
 

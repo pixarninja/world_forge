@@ -9,6 +9,11 @@ public class SpriteProp extends SpriteEntity {
 
     int propID;
 
+    public SpriteProp(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
+                      double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
+                      double xDimension, double yDimension, double spriteScale,
+                      double left, double top, double right, double bottom, String method) {}
+
     public SpriteProp(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes, int propID,
                       double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
                       double xDimension, double yDimension, double spriteScale,
