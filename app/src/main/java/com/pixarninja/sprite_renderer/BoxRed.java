@@ -3,6 +3,7 @@ package com.pixarninja.sprite_renderer;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import java.util.LinkedHashMap;
 import java.util.Random;
 
 public class BoxRed extends SpriteCharacter {
@@ -303,6 +304,77 @@ public class BoxRed extends SpriteCharacter {
         rect.bottom = rect.top + render.getFrameHeight();
         render.setFrameToDraw(rect);
 
+    }
+
+    @Override
+    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos) {
+        if(touched && !controller.getReacting()) {
+            RectF boundingBox = render.getBoundingBox();
+            if(yTouchedPos >= (7.5 * height / 10)) {
+                return;
+            }
+            if (xTouchedPos >= boundingBox.left && xTouchedPos <= boundingBox.right) {
+                /* center of the sprite */
+                if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
+                    refreshCharacter("center");
+                    updateView();
+                    controller.setReacting(true);
+                }
+                /* top of the sprite */
+                else if (yTouchedPos < boundingBox.top) {
+                    refreshCharacter("top");
+                    updateView();
+                    controller.setReacting(true);
+                }
+                /* bottom of the sprite */
+                else if (yTouchedPos > boundingBox.bottom) {
+                    refreshCharacter("bottom");
+                    updateView();
+                    controller.setReacting(true);
+                }
+            }
+            else if (xTouchedPos < boundingBox.left) {
+                /* left side of the sprite */
+                if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
+                    refreshCharacter("left");
+                    updateView();
+                    controller.setReacting(true);
+                }
+                    /* top left side of the sprite */
+                else if (yTouchedPos < boundingBox.top) {
+                    refreshCharacter("top left");
+                    updateView();
+                    controller.setReacting(true);
+                }
+                    /* bottom right side of the sprite */
+                else if (yTouchedPos > boundingBox.bottom) {
+                    refreshCharacter("bottom right");
+                    updateView();
+                    controller.setReacting(true);
+                }
+            }
+            /* right side of the sprite */
+            else if (xTouchedPos > boundingBox.right) {
+                /* right side of the screen */
+                if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
+                    refreshCharacter("right");
+                    updateView();
+                    controller.setReacting(true);
+                }
+                    /* top right side of the sprite */
+                else if (yTouchedPos < boundingBox.top) {
+                    refreshCharacter("top right");
+                    updateView();
+                    controller.setReacting(true);
+                }
+                    /* bottom right side of the sprite */
+                else if (yTouchedPos > boundingBox.bottom) {
+                    refreshCharacter("bottom right");
+                    updateView();
+                    controller.setReacting(true);
+                }
+            }
+        }
     }
 
 }
