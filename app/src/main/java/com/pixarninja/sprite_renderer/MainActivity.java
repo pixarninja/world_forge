@@ -61,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
         /* initialize the entity for the sprite view */
         spriteView.setControllerMap(controllerMap);
 
+        /* print memory statistics */
+        final Runtime runtime = Runtime.getRuntime();
+        final long usedMemInMB=(runtime.totalMemory() - runtime.freeMemory()) / 1048576L;
+        final long maxHeapSizeInMB=runtime.maxMemory() / 1048576L;
+        final long availHeapSizeInMB = maxHeapSizeInMB - usedMemInMB;
+        System.out.println("Memory Used: " + usedMemInMB + "MB");
+        System.out.println("Max Heap Size: " + maxHeapSizeInMB + "MB");
+        System.out.println("Avaliable Heap Size: " + availHeapSizeInMB + "MB");
+
     }
 
 }
