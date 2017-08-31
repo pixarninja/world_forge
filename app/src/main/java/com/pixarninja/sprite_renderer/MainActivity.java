@@ -34,28 +34,24 @@ public class MainActivity extends AppCompatActivity {
                 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop");
         controllerMap.put("BackgroundController", entity.getController());
 
-        /* dark pattern for background */
-
-        /* light flair for background */
-
         /* initialize box controller */
-        entity = new BoxRed(getResources(), 0.65, maxRes / 2, maxRes / 2, width, height);
+        entity = new BoxRed(getResources(), 0.65, maxRes / 2, maxRes / 2, width, height, null, "init");
         controllerMap.put("BoxController", entity.getController());
 
         /* red button */
-        entity = new SpriteButton(getResources(), 1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_home_on, R.mipmap.button_home_off, R.mipmap.button_home_off,
-                0, 0, (8 * height / 10), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop");
+        entity = new SpriteButton(getResources(), 0.1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_red_on, R.mipmap.button_red_off, R.mipmap.button_red_off,
+                0, 0, (0.75 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop");
         controllerMap.put("RedButtonController", entity.getController());
 
         /* green button */
-        entity = new SpriteButton(getResources(), 1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_creativemode_on, R.mipmap.button_creativemode_off, R.mipmap.button_creativemode_off,
-                0, 0, (8 * height / 10), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop");
-        controllerMap.put("RedButtonController", entity.getController());
+        entity = new SpriteButton(getResources(), 0.1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_green_on, R.mipmap.button_green_off, R.mipmap.button_green_off,
+                0, 0, (1.5 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop");
+        controllerMap.put("GreenButtonController", entity.getController());
 
         /* blue button */
-        entity = new SpriteButton(getResources(), 1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_rate_on, R.mipmap.button_rate_off, R.mipmap.button_rate_off,
-                0, 0, (8 * height / 10), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop");
-        controllerMap.put("RedButtonController", entity.getController());
+        entity = new SpriteButton(getResources(), 0.1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_blue_on, R.mipmap.button_blue_off, R.mipmap.button_blue_off,
+                0, 0, (2.25 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop");
+        controllerMap.put("BlueButtonController", entity.getController());
 
         /* set frame rate for all controllers */
         for(LinkedHashMap.Entry<String,SpriteController> controller : controllerMap.entrySet()) {

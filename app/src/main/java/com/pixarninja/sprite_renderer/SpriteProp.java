@@ -10,12 +10,12 @@ public class SpriteProp extends SpriteEntity {
     int propID;
 
     public SpriteProp(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
-                      double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
+                      double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
                       double xDimension, double yDimension, double spriteScale,
                       double left, double top, double right, double bottom, String method) {}
 
     public SpriteProp(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes, int propID,
-                      double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
+                      double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
                       double xDimension, double yDimension, double spriteScale,
                       double left, double top, double right, double bottom, String method) {
 
@@ -55,12 +55,10 @@ public class SpriteProp extends SpriteEntity {
         int xSpriteRes;
         int ySpriteRes;
 
-        if (render == null) {
-            render = new Sprite();
-        }
-
         switch (ID) {
+            case "init":
             default:
+                render = new Sprite();
                 render.setID(ID);
                 render.setXDimension(xDimension);
                 render.setYDimension(yDimension);

@@ -10,8 +10,11 @@ public class SpriteThread extends Thread implements Runnable {
         spriteView = view;
     }
 
-    public void setRunning(boolean run) {
-        running = run;
+    public boolean getRunning() {
+        return running;
+    }
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
     @Override

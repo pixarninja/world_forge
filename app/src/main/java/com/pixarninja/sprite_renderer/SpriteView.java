@@ -83,7 +83,7 @@ public class SpriteView extends SurfaceView {
 
         Canvas canvas = getHolder().lockCanvas();
 
-        if(canvas != null){
+        if(canvas != null && spriteThread.getRunning()){
             synchronized (getHolder()) {
                 /* refresh scene */
                 canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
@@ -94,8 +94,8 @@ public class SpriteView extends SurfaceView {
                         SpriteController controller = entry.getValue();
                         SpriteEntity entity = controller.getEntity();
                         if(entity != null) {
+                            //System.out.println("Rendering: " + entity.getSprite().getID());
                             if (entity.getMessage() != null) {
-                                Sprite sprite = entity.getSprite();
                                 canvas.drawText(entity.getMessage(), (float) controller.getXPos(), (float) controller.getYPos(), null);
                             } else {
                                 Sprite sprite = entity.getSprite();
@@ -144,12 +144,22 @@ public class SpriteView extends SurfaceView {
             default:
         }
         if (controllerMap != null && touched) {
+            SpriteThread spriteThread = new SpriteThread(this);
+            spriteThread.setRunning(false);
             for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
                 if(entry.getValue().getEntity() != null) {
-                    //System.out.println("Entry Frame Rate: " + entry.getValue().getFrameRate());
                     entry.getValue().getEntity().onTouchEvent(this, entry, controllerMap, touched, xTouchedPos, yTouchedPos);
                 }
             }
+            /* for debugging purposes
+            for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
+                if(entry.getValue().getEntity() != null) {
+                    entry.getValue().printController();
+                }
+            }*/
+            spriteThread.setRunning(true);
+            spriteThread.start();
+            setSpriteThread(spriteThread);
         }
 
         return true;

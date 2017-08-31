@@ -1,10 +1,8 @@
 package com.pixarninja.sprite_renderer;
 
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
-
 import java.util.LinkedHashMap;
 
 public class SpriteButton extends SpriteEntity {
@@ -14,7 +12,7 @@ public class SpriteButton extends SpriteEntity {
     private int offID;
 
     public SpriteButton(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes, int onID, int pokedID, int offID,
-                        double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
+                        double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
                         double xDimension, double yDimension, double spriteScale,
                         double left, double top, double right, double bottom, String method) {
 
@@ -46,7 +44,7 @@ public class SpriteButton extends SpriteEntity {
         this.bottom = bottom;
         this.method = method;
 
-        refreshCharacter("off");
+        refreshCharacter("init");
 
     }
 
@@ -55,10 +53,6 @@ public class SpriteButton extends SpriteEntity {
 
         int xSpriteRes;
         int ySpriteRes;
-
-        if (render == null) {
-            render = new Sprite();
-        }
 
         switch (ID) {
             case "off":
@@ -113,7 +107,7 @@ public class SpriteButton extends SpriteEntity {
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
-            default:
+            case "on":
                 render.setID(ID);
                 render.setXDimension(xDimension);
                 render.setYDimension(yDimension);
@@ -138,6 +132,15 @@ public class SpriteButton extends SpriteEntity {
                 render.setCurrentFrame(0);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
+                break;
+            case "init":
+            default:
+                render = new Sprite();
+                refreshCharacter("off");
+                controller.setXPos(controller.getXPos() - render.getSpriteWidth() / 2);
+                controller.setYPos(controller.getYPos() - render.getSpriteHeight() / 2);
+                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
+                render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
         }
         controller.setEntity(this);
         updateBoundingBox();
@@ -151,7 +154,7 @@ public class SpriteButton extends SpriteEntity {
                 /* center of the sprite */
                 if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
                     /* change the sprite if needed */
-                    if(entry.getKey().equals("RedButton")) {
+                    if(entry.getKey().equals("RedButtonController")) {
 
                         SpriteController controller;
 
@@ -160,21 +163,12 @@ public class SpriteButton extends SpriteEntity {
                         controller.makeTransition("red");
                         controllerMap.put("BackgroundController", controller);
 
-                        /* set light pattern
-                        controller = controllerMap.get("LightPatternController");
-                        controller.makeTransition("red");
-                        controllerMap.put("LightPatternController", controller);
-
-                        /* set dark pattern
-                        controller = controllerMap.get("DarkPatternController");
-                        controller.makeTransition("red");
-                        controllerMap.put("DarkPatternController", controller);
-
                         /* set box */
                         controller = controllerMap.get("BoxController");
                         SpriteCharacter oldBox = (SpriteCharacter) controller.getEntity();
-                        SpriteCharacter newBox = new BoxRed(oldBox.res, oldBox.percentOfScreen, oldBox.xRes, oldBox.yRes, width, height);
+                        SpriteCharacter newBox = new BoxRed(oldBox.res, oldBox.percentOfScreen, oldBox.xRes, oldBox.yRes, width, height, controller, "inherit");
                         controller.setEntity(newBox);
+                        controller.setReacting(false);
                         controllerMap.put("BoxController", controller);
 
                         /* set red button */
@@ -193,7 +187,7 @@ public class SpriteButton extends SpriteEntity {
                         controllerMap.put("BlueButtonController", controller);
 
                     }
-                    else if(entry.getKey().equals("ButtonGreen")) {
+                    else if(entry.getKey().equals("GreenButtonController")) {
 
                         SpriteController controller;
 
@@ -202,21 +196,12 @@ public class SpriteButton extends SpriteEntity {
                         controller.makeTransition("green");
                         controllerMap.put("BackgroundController", controller);
 
-                        /* set light pattern
-                        controller = controllerMap.get("LightPatternController");
-                        controller.makeTransition("green");
-                        controllerMap.put("LightPatternController", controller);
-
-                        /* set dark pattern
-                        controller = controllerMap.get("DarkPatternController");
-                        controller.makeTransition("green");
-                        controllerMap.put("DarkPatternController", controller);
-
                         /* set box */
                         controller = controllerMap.get("BoxController");
                         SpriteCharacter oldBox = (SpriteCharacter) controller.getEntity();
-                        SpriteCharacter newBox = new BoxGreen(oldBox.res, oldBox.percentOfScreen, oldBox.xRes, oldBox.yRes, width, height);
+                        SpriteCharacter newBox = new BoxGreen(oldBox.res, oldBox.percentOfScreen, oldBox.xRes, oldBox.yRes, width, height, controller, "inherit");
                         controller.setEntity(newBox);
+                        controller.setReacting(false);
                         controllerMap.put("BoxController", controller);
 
                         /* set red button */
@@ -235,7 +220,7 @@ public class SpriteButton extends SpriteEntity {
                         controllerMap.put("BlueButtonController", controller);
 
                     }
-                    else if(entry.getKey().equals("BlueButton")) {
+                    else if(entry.getKey().equals("BlueButtonController")) {
 
                         SpriteController controller;
 
@@ -244,21 +229,12 @@ public class SpriteButton extends SpriteEntity {
                         controller.makeTransition("blue");
                         controllerMap.put("BackgroundController", controller);
 
-                        /* set light pattern
-                        controller = controllerMap.get("LightPatternController");
-                        controller.makeTransition("blue");
-                        controllerMap.put("LightPatternController", controller);
-
-                        /* set dark pattern
-                        controller = controllerMap.get("DarkPatternController");
-                        controller.makeTransition("blue");
-                        controllerMap.put("DarkPatternController", controller);
-
                         /* set box */
                         controller = controllerMap.get("BoxController");
                         SpriteCharacter oldBox = (SpriteCharacter) controller.getEntity();
-                        SpriteCharacter newBox = new BoxBlue(oldBox.res, oldBox.percentOfScreen, oldBox.xRes, oldBox.yRes, width, height);
+                        SpriteCharacter newBox = new BoxBlue(oldBox.res, oldBox.percentOfScreen, oldBox.xRes, oldBox.yRes, width, height, controller, "inherit");
                         controller.setEntity(newBox);
+                        controller.setReacting(false);
                         controllerMap.put("BoxController", controller);
 
                         /* set red button */

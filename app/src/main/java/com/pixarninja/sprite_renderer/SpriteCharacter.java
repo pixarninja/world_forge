@@ -6,8 +6,6 @@ import java.util.LinkedHashMap;
 
 public class SpriteCharacter extends SpriteEntity {
 
-    protected volatile boolean reacting;
-
     @Override
     public void updateView() {
 
@@ -39,26 +37,26 @@ public class SpriteCharacter extends SpriteEntity {
 
     @Override
     public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos) {
-        if(touched && !reacting) {
+        if(touched && !controller.getReacting()) {
             RectF boundingBox = render.getBoundingBox();
             if (xTouchedPos >= boundingBox.left && xTouchedPos <= boundingBox.right) {
                 /* center of the sprite */
                 if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
                     refreshCharacter("center");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
                 /* top of the sprite */
                 else if (yTouchedPos < boundingBox.top) {
                     refreshCharacter("top");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
                 /* bottom of the sprite */
                 else if (yTouchedPos > boundingBox.bottom) {
                     refreshCharacter("bottom");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
             }
             else if (xTouchedPos < boundingBox.left) {
@@ -66,19 +64,19 @@ public class SpriteCharacter extends SpriteEntity {
                 if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
                     refreshCharacter("left");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
                     /* top left side of the sprite */
                 else if (yTouchedPos < boundingBox.top) {
                     refreshCharacter("top left");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
                     /* bottom right side of the sprite */
                 else if (yTouchedPos > boundingBox.bottom) {
                     refreshCharacter("bottom right");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
             }
             /* right side of the sprite */
@@ -87,25 +85,21 @@ public class SpriteCharacter extends SpriteEntity {
                 if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
                     refreshCharacter("right");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
                     /* top right side of the sprite */
                 else if (yTouchedPos < boundingBox.top) {
                     refreshCharacter("top right");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
                     /* bottom right side of the sprite */
                 else if (yTouchedPos > boundingBox.bottom) {
                     refreshCharacter("bottom right");
                     updateView();
-                    reacting = true;
+                    controller.setReacting(true);
                 }
             }
-            SpriteThread spriteThread = new SpriteThread(spriteView);
-            spriteThread.setRunning(true);
-            spriteThread.start();
-            spriteView.setSpriteThread(spriteThread);
         }
     }
 

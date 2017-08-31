@@ -174,7 +174,7 @@ public class Sprite {
         this.method = method;
     }
 
-    public void spriteInfo() {
+    public void printSprite() {
 
         System.out.println("Info of sprite " + ID + ":");
         System.out.println(" - sprite sheet: " + spriteSheet);

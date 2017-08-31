@@ -13,6 +13,7 @@ public class SpriteController {
     private double yDelta;
     private int frameLengthInMilliseconds = 35;
     private long lastFrameChangeTime;
+    private boolean reacting;
 
 
     public SpriteEntity getEntity() { return this.entity; }
@@ -50,8 +51,27 @@ public class SpriteController {
     public long getLastFrameChangeTime() { return this.lastFrameChangeTime; }
     public void setLastFrameChangeTime(long lastFrameChangeTime) { this.lastFrameChangeTime = lastFrameChangeTime; }
 
+    public boolean getReacting() { return this.reacting; }
+    public void setReacting(boolean reacting) { this.reacting = reacting; }
+
     public void makeTransition(String ID) {
         this.entity.refreshCharacter(ID);
+    }
+
+    public void printController() {
+
+        System.out.println("Info of controller :");
+        System.out.println(" - entity: " + entity);
+        System.out.println(" - x initial position: " + xInit);
+        System.out.println(" - y initial position: " + yInit);
+        System.out.println(" - x position: " + xPos);
+        System.out.println(" - y position: " + yPos);
+        System.out.println(" - x delta: " + xDelta);
+        System.out.println(" - y delta: " + yDelta);
+        System.out.println(" - frame rate: " + frameLengthInMilliseconds);
+        System.out.println(" - last frame change time: " + lastFrameChangeTime);
+        System.out.println(" - reacting: " + reacting);
+
     }
 
 }

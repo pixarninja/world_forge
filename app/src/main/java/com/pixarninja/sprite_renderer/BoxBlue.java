@@ -3,25 +3,25 @@ package com.pixarninja.sprite_renderer;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import java.util.Random;
 
 public class BoxBlue extends SpriteCharacter {
 
-    protected volatile boolean reacting;
     protected int delta;
     protected int count;
 
-    public BoxBlue(Resources res, double percentOfScreen, int xRes, int yRes, int width, int height) {
+    public BoxBlue(Resources res, double percentOfScreen, int xRes, int yRes, int width, int height, SpriteController controller, String ID) {
 
-        controller = new SpriteController();
         this.res = res;
         this.percentOfScreen = percentOfScreen;
-        this.width = width;
-        this.height = height;
         this.xRes = xRes;
         this.yRes = yRes;
+        this.width = width;
+        this.height = height;
+        this.controller = controller;
         count = 0;
 
-        refreshCharacter("idle");
+        refreshCharacter(ID);
 
     }
 
@@ -30,16 +30,6 @@ public class BoxBlue extends SpriteCharacter {
 
         int xSpriteRes;
         int ySpriteRes;
-
-        if(render == null) {
-
-            render = new Sprite();
-            controller.setXPos((width / 2) - (render.getSpriteWidth() / 2));
-            controller.setYPos((height / 2) - (render.getSpriteHeight() / 2));
-            controller.setXDelta(0);
-            controller.setYDelta(0);
-
-        }
 
         switch (ID) {
             case "center":
@@ -66,6 +56,9 @@ public class BoxBlue extends SpriteCharacter {
                 render.setXCurrentFrame(0);
                 render.setYCurrentFrame(0);
                 render.setCurrentFrame(0);
+                Random random = new Random();
+                controller.setXPos(random.nextDouble() * width * 0.5);
+                controller.setYPos(random.nextDouble() * height * 0.5);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
@@ -181,7 +174,7 @@ public class BoxBlue extends SpriteCharacter {
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
                 break;
-            default:
+            case "idle":
                 render.setID(ID);
                 render.setXDimension(1.611);
                 render.setYDimension(1.611);
@@ -205,6 +198,21 @@ public class BoxBlue extends SpriteCharacter {
                 render.setXCurrentFrame(0);
                 render.setYCurrentFrame(0);
                 render.setCurrentFrame(0);
+                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
+                render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
+                break;
+            case "inherit":
+                render = new Sprite();
+                refreshCharacter("idle");
+                break;
+            case "init":
+            default:
+                render = new Sprite();
+                controller.setXDelta(0);
+                controller.setYDelta(0);
+                refreshCharacter("idle");
+                controller.setXPos(width / 2 - render.getSpriteWidth() / 2);
+                controller.setYPos(height / 2 - render.getSpriteHeight() / 2);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
         }
@@ -244,7 +252,7 @@ public class BoxBlue extends SpriteCharacter {
                     if ((render.getYCurrentFrame() >= render.getYFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
                         if(render.getMethod().equals("once")) {
                             refreshCharacter("idle");
-                            reacting = false;
+                            controller.setReacting(false);
                         }
                         else if(render.getMethod().equals("mirror") || render.getMethod().equals("poked")) {
                             render.setCurrentFrame(render.getFrameCount());
@@ -275,7 +283,7 @@ public class BoxBlue extends SpriteCharacter {
                     render.setYCurrentFrame(render.getYCurrentFrame() + delta);
                     if ((render.getYCurrentFrame() < 0) || (render.getCurrentFrame() < 0)) {
                         refreshCharacter("idle");
-                        reacting = false;
+                        controller.setReacting(false);
                         count = 0;
                     }
                     if (count > 0) {
