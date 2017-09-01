@@ -16,36 +16,37 @@ If you would like to make a game or app that uses this form of spritesheet, clon
 
 SpriteEntity is one of the main classes that is used by this project. It provides the foundation of all objects rendered to the screen; the SpriteProp, SpriteButton, and SpriteCharacter classes all extend the SpriteEntity class. Inside this class are the following methods:
 
-### static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight)
+### static Bitmap decodeSampledBitmapFromResource(...)
 
-Is used to scale Bitmap images depending on the required width and hieght passed in.
+Parameters: Resources res, int resId, int reqWidth, int reqHeight. This method is used to scale Bitmap images depending on the required width and hieght passed in.
 
-### static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+### static int calculateInSampleSize(...)
 
-Is also used to scale Bitmap images, but is used to actually calculate the necessary sample size.
+Parameters: BitmapFactory.Options options, int reqWidth, int reqHeight. This is also used to scale Bitmap images, but is used to actually calculate the necessary sample size.
 
-### void refreshCharacter(String ID)
+### void refreshCharacter(...)
 
-Should be overrridden and filled with transitions. For examples on transitions, see how the sample game provides overrides to this method. See also the Transitions section of this document.
+Parameters: String ID. This method should be overridden and filled with transitions. For examples on transitions, see how the sample game provides overrides to this method. See also the Transitions section of this document.
 
 ### void updateView()
 
-Can be overrided to proved extra implementation. The intrinsic implementation of this class is to 1) move the animation if x delta and y delta are nonzero, 2) update the sprite frame being rendered, 3) update the bounding box for the sprite.
+Parameters: none. This method can be overrided to proved extra implementation. The intrinsic implementation of this class is to 1) move the animation if x delta and y delta are nonzero, 2) update the sprite frame being rendered, 3) update the bounding box for the sprite.
 
 ### void updateBoundingBox()
 
-Updates the spritesheet's bounding box, which controls how the user interacts with the sprite.
+Parameters: none. This method updates the spritesheet's bounding box, which controls how the user interacts with the sprite.
+
 ### void getCurrentFrame()
 
-Updates the sprite frame being rendered. This method is used to create movement for the animation.
+Parameters: none. This method updates the sprite frame being rendered. This method is used to create movement for the animation.
 
-### String parseID(String ID)
+### String parseID(...)
 
-Adds functionality for parsing the transition to be rendered. This allows transitions to be inherited from or initialized, giving more control and dynamism. For examples on dynamic transitions, see the overriden refreshCharacter method in the BoxRed class.
+Parameters: String ID. This method adds functionality for parsing the transition to be rendered. This allows transitions to be inherited from or initialized, giving more control and dynamism. For examples on dynamic transitions, see the overriden refreshCharacter method in the BoxRed class.
 
-### void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos)
+### void onTouchEvent(...)
 
-Called when the user touches the screen. This method is initially left empty, since not all animations will need interactions. Different interactions have been modeled to create the sample game.
+Parameters: SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos. This method is called when the user touches the screen. This method is initially left empty, since not all animations will need interactions. Different interactions have been modeled to create the sample game.
 
 # Transitions
 
