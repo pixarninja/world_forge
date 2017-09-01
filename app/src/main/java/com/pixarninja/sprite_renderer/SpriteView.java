@@ -91,6 +91,25 @@ public class SpriteView extends SurfaceView {
 
     }
 
+    /*public void onResume(){
+        isRunning = true;
+        spriteThread = new SpriteThread(render[0], this);
+        spriteThread.start();
+    }
+
+    public void onPause(){
+        boolean retry = true;
+        isRunning = false;
+        while(retry){
+            try {
+                spriteThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
+
     protected void drawSprite() {
 
         Canvas canvas = getHolder().lockCanvas();

@@ -180,7 +180,6 @@ abstract class SpriteEntity {
             }
         }
         else if(expression.length == 1) {
-            render = new Sprite();
             return(expression[0]);
         }
         else {

@@ -35,9 +35,7 @@ public class MainActivity extends AppCompatActivity {
         int width = (int)(displayMetrics.widthPixels);
 
         /* background */
-        entity = new Background(spriteView, getResources(), 1, width, height, (int)(maxRes * 0.4), (int)(maxRes * 0.4),
-                0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "init");
-        controllerMap.put("BackgroundController", entity.getController());
+        spriteView.setBackgroundResource(R.drawable.background_red);
 
         /* dark pattern */
         entity = new DarkPattern(spriteView, getResources(), 3, width, height, (int)(maxRes * 0.4), (int)(maxRes * 0.4),

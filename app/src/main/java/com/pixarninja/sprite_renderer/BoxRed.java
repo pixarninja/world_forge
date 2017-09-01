@@ -38,8 +38,6 @@ public class BoxRed extends SpriteCharacter {
         /* setup sprite via parsing */
         ID = parseID(ID);
 
-        controller.setTransition(ID);
-
         switch (ID) {
             case "center":
                 render.setID(ID);
@@ -201,7 +199,9 @@ public class BoxRed extends SpriteCharacter {
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
         }
+        render.printSprite();
         controller.setEntity(this);
+        controller.setTransition(ID);
         updateBoundingBox();
     }
 

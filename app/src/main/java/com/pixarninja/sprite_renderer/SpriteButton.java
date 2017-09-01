@@ -162,33 +162,41 @@ public class SpriteButton extends SpriteEntity {
                         SpriteController controller;
 
                         /* set background */
-                        controller = controllerMap.get("BackgroundController");
-                        controller.makeTransition("red");
-                        controllerMap.put("BackgroundController", controller);
+                        spriteView.setBackgroundResource(R.drawable.background_red);
 
                         /* set dark pattern */
                         controller = controllerMap.get("DarkPatternController");
-                        controller.makeTransition("red");
+                        if(!controller.getTransition().equals("red")) {
+                            controller.makeTransition("red");
+                        }
                         controllerMap.put("DarkPatternController", controller);
 
                         /* set light pattern */
                         controller = controllerMap.get("LightPatternController");
-                        controller.makeTransition("red");
+                        if(!controller.getTransition().equals("red")) {
+                            controller.makeTransition("red");
+                        }
                         controllerMap.put("LightPatternController", controller);
 
                         /* set red button */
                         controller = controllerMap.get("RedButtonController");
-                        controller.makeTransition("on");
+                        if(!controller.getTransition().equals("on")) {
+                            controller.makeTransition("on");
+                        }
                         controllerMap.put("RedButtonController", controller);
 
                         /* set green button */
                         controller = controllerMap.get("GreenButtonController");
-                        controller.makeTransition("off");
+                        if(!controller.getTransition().equals("off")) {
+                            controller.makeTransition("off");
+                        }
                         controllerMap.put("GreenButtonController", controller);
 
                         /* set blue button */
                         controller = controllerMap.get("BlueButtonController");
-                        controller.makeTransition("off");
+                        if(!controller.getTransition().equals("off")) {
+                            controller.makeTransition("off");
+                        }
                         controllerMap.put("BlueButtonController", controller);
 
                         /* set box */
@@ -208,33 +216,41 @@ public class SpriteButton extends SpriteEntity {
                         SpriteController controller;
 
                         /* set background */
-                        controller = controllerMap.get("BackgroundController");
-                        controller.makeTransition("green");
-                        controllerMap.put("BackgroundController", controller);
+                        spriteView.setBackgroundResource(R.drawable.background_green);
 
                         /* set dark pattern */
                         controller = controllerMap.get("DarkPatternController");
-                        controller.makeTransition("green");
+                        if(!controller.getTransition().equals("green")) {
+                            controller.makeTransition("green");
+                        }
                         controllerMap.put("DarkPatternController", controller);
 
                         /* set light pattern */
                         controller = controllerMap.get("LightPatternController");
-                        controller.makeTransition("green");
+                        if(!controller.getTransition().equals("green")) {
+                            controller.makeTransition("green");
+                        }
                         controllerMap.put("LightPatternController", controller);
 
                         /* set red button */
                         controller = controllerMap.get("RedButtonController");
-                        controller.makeTransition("off");
+                        if(!controller.getTransition().equals("off")) {
+                            controller.makeTransition("off");
+                        }
                         controllerMap.put("RedButtonController", controller);
 
                         /* set green button */
                         controller = controllerMap.get("GreenButtonController");
-                        controller.makeTransition("on");
+                        if(!controller.getTransition().equals("on")) {
+                            controller.makeTransition("on");
+                        }
                         controllerMap.put("GreenButtonController", controller);
 
                         /* set blue button */
                         controller = controllerMap.get("BlueButtonController");
-                        controller.makeTransition("off");
+                        if(!controller.getTransition().equals("off")) {
+                            controller.makeTransition("off");
+                        }
                         controllerMap.put("BlueButtonController", controller);
 
                         /* set box */
@@ -254,33 +270,41 @@ public class SpriteButton extends SpriteEntity {
                         SpriteController controller;
 
                         /* set background */
-                        controller = controllerMap.get("BackgroundController");
-                        controller.makeTransition("blue");
-                        controllerMap.put("BackgroundController", controller);
+                        spriteView.setBackgroundResource(R.drawable.background_blue);
 
                         /* set dark pattern */
                         controller = controllerMap.get("DarkPatternController");
-                        controller.makeTransition("blue");
+                        if(!controller.getTransition().equals("blue")) {
+                            controller.makeTransition("blue");
+                        }
                         controllerMap.put("DarkPatternController", controller);
 
                         /* set light pattern */
                         controller = controllerMap.get("LightPatternController");
-                        controller.makeTransition("blue");
+                        if(!controller.getTransition().equals("blue")) {
+                            controller.makeTransition("blue");
+                        }
                         controllerMap.put("LightPatternController", controller);
 
                         /* set red button */
                         controller = controllerMap.get("RedButtonController");
-                        controller.makeTransition("off");
+                        if(!controller.getTransition().equals("off")) {
+                            controller.makeTransition("off");
+                        }
                         controllerMap.put("RedButtonController", controller);
 
                         /* set green button */
                         controller = controllerMap.get("GreenButtonController");
-                        controller.makeTransition("off");
+                        if(!controller.getTransition().equals("off")) {
+                            controller.makeTransition("off");
+                        }
                         controllerMap.put("GreenButtonController", controller);
 
                         /* set blue button */
                         controller = controllerMap.get("BlueButtonController");
-                        controller.makeTransition("on");
+                        if(!controller.getTransition().equals("on")) {
+                            controller.makeTransition("on");
+                        }
                         controllerMap.put("BlueButtonController", controller);
 
                         /* set box */
