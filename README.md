@@ -10,6 +10,10 @@ The term "sprite rendering" refers to the use of spritesheets in order to implem
 
 If you would like to make a game or app that uses this form of spritesheet, clone this repository and start by editing the sample game provided for you. Don't forget to rename the package directories, and update the new package name inside of the manifest. For help on creating a game, descriptions of each class and its methods can be found below.
 
+# The Sample Game
+
+![SampleGame](/source/Photoshop/sample_game_description.png)
+
 # Class Definitions
 
 ## SpriteEntity
