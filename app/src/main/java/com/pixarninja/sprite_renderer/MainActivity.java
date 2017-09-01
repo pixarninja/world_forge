@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         spriteView = (SpriteView) findViewById(R.id.spriteView);
         SpriteThread spriteThread = new SpriteThread(spriteView);
+        spriteThread.setRunning(true);
         spriteThread.start();
         spriteView.setSpriteThread(spriteThread);
 

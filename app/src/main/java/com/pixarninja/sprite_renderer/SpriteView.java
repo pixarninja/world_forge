@@ -67,10 +67,10 @@ public class SpriteView extends SurfaceView {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                spriteThread.setRunning(true);
-                if (!spriteThread.isAlive()) {
+                /*if (!spriteThread.isAlive()) {
                     spriteThread.start();
                 }
+                spriteThread.setRunning(true);*/
             }
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
@@ -122,7 +122,11 @@ public class SpriteView extends SurfaceView {
                 }
             }
         }
-        getHolder().unlockCanvasAndPost(canvas);
+        try {
+            getHolder().unlockCanvasAndPost(canvas);
+        } catch(IllegalStateException e) {
+            return;
+        }
 
     }
 
@@ -156,9 +160,6 @@ public class SpriteView extends SurfaceView {
             default:
         }
         if (controllerMap != null && touched) {
-            //SpriteThread spriteThread = new SpriteThread(this);
-            //spriteThread.setRunning(false);
-            //setSpriteThread(spriteThread);
             for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
                 if(entry.getValue().getEntity() != null) {
                     entry.getValue().getEntity().onTouchEvent(this, entry, controllerMap, touched, xTouchedPos, yTouchedPos);
@@ -170,8 +171,6 @@ public class SpriteView extends SurfaceView {
                     entry.getValue().printController();
                 }
             }*/
-            //spriteThread.setRunning(true);
-            //spriteThread.start();
         }
 
         return true;
