@@ -68,12 +68,24 @@ public class SpriteView extends SurfaceView {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 spriteThread.setRunning(true);
-                spriteThread.start();
+                if (!spriteThread.isAlive()) {
+                    spriteThread.start();
+                }
             }
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
             @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {}
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                boolean retry = true;
+                spriteThread.setRunning(false);
+                while (retry) {
+                    try {
+                        spriteThread.join();
+                        retry = false;
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
 
         });
 
@@ -93,24 +105,24 @@ public class SpriteView extends SurfaceView {
                     for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
                         SpriteController controller = entry.getValue();
                         SpriteEntity entity = controller.getEntity();
-                        if(entity != null) {
-                            //System.out.println("Rendering: " + entity.getSprite().getID());
-                            if (entity.getMessage() != null) {
-                                canvas.drawText(entity.getMessage(), (float) controller.getXPos(), (float) controller.getYPos(), null);
-                            } else {
-                                Sprite sprite = entity.getSprite();
-                                RectF rectF = new RectF();
-                                rectF.set((int) controller.getXPos(), (int) controller.getYPos(), (int) controller.getXPos() + sprite.getSpriteWidth(), (int) controller.getYPos() + sprite.getSpriteHeight());
-                                sprite.setWhereToDraw(rectF);
-                                entity.getCurrentFrame();
+                        entity.updateView();
+                        if (entity.getMessage() != null) {
+                            canvas.drawText(entity.getMessage(), (float) controller.getXPos(), (float) controller.getYPos(), null);
+                        } else {
+                            Sprite sprite = entity.getSprite();
+                            if(sprite.getSpriteSheet() == null || sprite.getFrameToDraw() == null || sprite.getWhereToDraw() == null) {
+                                sprite.printSprite();
+                                //System.exit(1);
+                            }
+                            else {
                                 canvas.drawBitmap(sprite.getSpriteSheet(), sprite.getFrameToDraw(), sprite.getWhereToDraw(), null);
                             }
                         }
                     }
                 }
             }
-            getHolder().unlockCanvasAndPost(canvas);
         }
+        getHolder().unlockCanvasAndPost(canvas);
 
     }
 
@@ -144,8 +156,9 @@ public class SpriteView extends SurfaceView {
             default:
         }
         if (controllerMap != null && touched) {
-            SpriteThread spriteThread = new SpriteThread(this);
-            spriteThread.setRunning(false);
+            //SpriteThread spriteThread = new SpriteThread(this);
+            //spriteThread.setRunning(false);
+            //setSpriteThread(spriteThread);
             for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
                 if(entry.getValue().getEntity() != null) {
                     entry.getValue().getEntity().onTouchEvent(this, entry, controllerMap, touched, xTouchedPos, yTouchedPos);
@@ -157,9 +170,8 @@ public class SpriteView extends SurfaceView {
                     entry.getValue().printController();
                 }
             }*/
-            spriteThread.setRunning(true);
-            spriteThread.start();
-            setSpriteThread(spriteThread);
+            //spriteThread.setRunning(true);
+            //spriteThread.start();
         }
 
         return true;

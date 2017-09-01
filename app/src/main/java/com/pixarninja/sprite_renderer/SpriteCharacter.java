@@ -6,32 +6,22 @@ import java.util.LinkedHashMap;
 
 public class SpriteCharacter extends SpriteEntity {
 
+    int count;
+    int delta;
+
+    public int getCount() { return this.count; }
+    public void setCount(int count) { this.count = count; }
+
+    public int getDelta() { return this.delta; }
+    public void setDelta(int delta) { this.delta = delta; }
+
     @Override
     public void updateView() {
 
         controller.setXPos(controller.getXPos() + controller.getXDelta());
         controller.setYPos(controller.getYPos() + controller.getYDelta());
+        getCurrentFrame();
         updateBoundingBox();
-
-    }
-
-    @Override
-    public void updateBoundingBox() {
-
-        /* find percentage to place from the center outwards */
-        float left = (float) (render.getXDimension() / 2 - render.getLeft()) / (float) render.getXDimension();
-        float top = (float) (render.getYDimension() / 2 - render.getTop()) / (float) render.getYDimension();
-        float right = (float) (render.getRight() - render.getXDimension() / 2) / (float) render.getXDimension();
-        float bottom = (float) (render.getBottom() - render.getYDimension() / 2) / (float) render.getYDimension();
-
-        /* centerOfBoundingBox = centerOfSprite - centerOfScreen */
-        RectF position = render.getWhereToDraw();
-        render.setBoundingBox(new RectF(
-                position.centerX() - (position.width() * left),
-                position.centerY() - (position.height() * top),
-                position.centerX() + (position.width() * right),
-                position.centerY() + (position.height() * bottom)
-        ));
 
     }
 
@@ -68,13 +58,13 @@ public class SpriteCharacter extends SpriteEntity {
                 }
                     /* top left side of the sprite */
                 else if (yTouchedPos < boundingBox.top) {
-                    refreshCharacter("top left");
+                    refreshCharacter("topLeft");
                     updateView();
                     controller.setReacting(true);
                 }
                     /* bottom right side of the sprite */
                 else if (yTouchedPos > boundingBox.bottom) {
-                    refreshCharacter("bottom right");
+                    refreshCharacter("bottomLeft");
                     updateView();
                     controller.setReacting(true);
                 }
@@ -89,13 +79,13 @@ public class SpriteCharacter extends SpriteEntity {
                 }
                     /* top right side of the sprite */
                 else if (yTouchedPos < boundingBox.top) {
-                    refreshCharacter("top right");
+                    refreshCharacter("topRight");
                     updateView();
                     controller.setReacting(true);
                 }
                     /* bottom right side of the sprite */
                 else if (yTouchedPos > boundingBox.bottom) {
-                    refreshCharacter("bottom right");
+                    refreshCharacter("bottomRight");
                     updateView();
                     controller.setReacting(true);
                 }

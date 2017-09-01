@@ -9,16 +9,24 @@ public class SpriteProp extends SpriteEntity {
 
     int propID;
 
-    public SpriteProp(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
+    /* for extending the class */
+    public SpriteProp(SpriteView spriteView, Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
                       double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
                       double xDimension, double yDimension, double spriteScale,
-                      double left, double top, double right, double bottom, String method) {}
+                      double left, double top, double right, double bottom, String method, SpriteController controller, String ID) {}
 
-    public SpriteProp(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes, int propID,
+    public SpriteProp(SpriteView spriteView, Resources res, double percentOfScreen, int width, int height, int xRes, int yRes, int propID,
                       double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
                       double xDimension, double yDimension, double spriteScale,
-                      double left, double top, double right, double bottom, String method) {
+                      double left, double top, double right, double bottom, String method, SpriteController controller, String ID) {
 
+        if(controller == null) {
+            this.controller = new SpriteController();
+        }
+        else {
+            this.controller = controller;
+        }
+        this.spriteView = spriteView;
         this.res = res;
         this.percentOfScreen = percentOfScreen;
         this.width = width;
@@ -26,13 +34,12 @@ public class SpriteProp extends SpriteEntity {
         this.xRes = xRes;
         this.yRes = yRes;
         this.propID = propID;
-        controller = new SpriteController();
-        controller.setXDelta(xDelta);
-        controller.setYDelta(yDelta);
-        controller.setXInit(xInit);
-        controller.setYInit(yInit);
-        controller.setXPos(xInit);
-        controller.setYPos(yInit);
+        this.controller.setXDelta(xDelta);
+        this.controller.setYDelta(yDelta);
+        this.controller.setXInit(xInit);
+        this.controller.setYInit(yInit);
+        this.controller.setXPos(xInit);
+        this.controller.setYPos(yInit);
         this.xFrameCount = xFrameCount;
         this.yFrameCount = yFrameCount;
         this.frameCount = frameCount;
@@ -45,7 +52,7 @@ public class SpriteProp extends SpriteEntity {
         this.bottom = bottom;
         this.method = method;
 
-        refreshCharacter("prop");
+        refreshCharacter(ID);
 
     }
 
@@ -54,6 +61,8 @@ public class SpriteProp extends SpriteEntity {
 
         int xSpriteRes;
         int ySpriteRes;
+
+        controller.setTransition(ID);
 
         switch (ID) {
             case "init":

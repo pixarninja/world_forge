@@ -10,13 +10,22 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
+    android:weightSum="1"
     tools:context="com.pixarninja.sprite_renderer.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:orientation="horizontal"
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:layout_weight="0.1" />
 
     <LinearLayout
         android:id="@+id/middleLayout"
         android:orientation="horizontal"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent">
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:layout_weight="0.8" >
 
         <com.pixarninja.sprite_renderer.SpriteView
             android:layout_height="match_parent"
@@ -25,5 +34,12 @@
         </com.pixarninja.sprite_renderer.SpriteView>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:orientation="horizontal"
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:layout_weight="0.1" />
 
 </LinearLayout>

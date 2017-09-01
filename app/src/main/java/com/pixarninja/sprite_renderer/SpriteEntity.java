@@ -104,6 +104,9 @@ abstract class SpriteEntity {
 
         /* centerOfBoundingBox = centerOfSprite - centerOfScreen */
         RectF position = render.getWhereToDraw();
+        if(position == null) {
+            return;
+        }
         render.setBoundingBox(new RectF(
                 position.centerX() - (position.width() * left),
                 position.centerY() - (position.height() * top),
@@ -142,6 +145,49 @@ abstract class SpriteEntity {
 
     }
 
-    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos) { }
+    public String parseID(String ID) {
+        String[] expression = ID.split(" ");
+        if(expression.length == 2) {
+            /* inherit from a certain sprite */
+            if(expression[0].equals("inherit")) {
+                render = new Sprite();
+                render.setXCurrentFrame(controller.getEntity().getSprite().getXCurrentFrame());
+                render.setYCurrentFrame(controller.getEntity().getSprite().getYCurrentFrame());
+                render.setCurrentFrame(controller.getEntity().getSprite().getCurrentFrame());
+                render.setFrameToDraw(controller.getEntity().getSprite().getFrameToDraw());
+                return(expression[1]);
+            }
+            /* initialize a certain sprite */
+            else if(expression[0].equals("init")) {
+                render = new Sprite();
+                render.setXCurrentFrame(0);
+                render.setYCurrentFrame(0);
+                render.setCurrentFrame(0);
+                refreshCharacter(expression[1]);
+                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
+                controller.setXPos(controller.getXInit() - render.getSpriteWidth() / 2);
+                controller.setYPos(controller.getYInit() - render.getSpriteHeight() / 2);
+                return(expression[1]);
+            }
+            else {
+                render = new Sprite();
+                render.setXCurrentFrame(0);
+                render.setYCurrentFrame(0);
+                render.setCurrentFrame(0);
+                controller.setXPos(controller.getXInit() - render.getSpriteWidth() / 2);
+                controller.setYPos(controller.getYInit() - render.getSpriteHeight() / 2);
+                return("init");
+            }
+        }
+        else if(expression.length == 1) {
+            render = new Sprite();
+            return(expression[0]);
+        }
+        else {
+            return null;
+        }
+    }
+
+    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos) {}
 
 }

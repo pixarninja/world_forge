@@ -8,18 +8,21 @@ import java.util.Random;
 
 public class BoxBlue extends SpriteCharacter {
 
-    protected int delta;
-    protected int count;
+    public BoxBlue(SpriteView spriteView, Resources res, double percentOfScreen, int xRes, int yRes, int width, int height, SpriteController controller, String ID) {
 
-    public BoxBlue(Resources res, double percentOfScreen, int xRes, int yRes, int width, int height, SpriteController controller, String ID) {
-
+        if(controller == null) {
+            this.controller = new SpriteController();
+        }
+        else {
+            this.controller = controller;
+        }
+        this.spriteView = spriteView;
         this.res = res;
         this.percentOfScreen = percentOfScreen;
         this.xRes = xRes;
         this.yRes = yRes;
         this.width = width;
         this.height = height;
-        this.controller = controller;
         count = 0;
 
         refreshCharacter(ID);
@@ -31,6 +34,11 @@ public class BoxBlue extends SpriteCharacter {
 
         int xSpriteRes;
         int ySpriteRes;
+
+        /* setup sprite via parsing */
+        ID = parseID(ID);
+
+        controller.setTransition(ID);
 
         switch (ID) {
             case "center":
@@ -54,18 +62,14 @@ public class BoxBlue extends SpriteCharacter {
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
                 Random random = new Random();
                 controller.setXPos(random.nextDouble() * width * 0.5);
                 controller.setYPos(random.nextDouble() * height * 0.5);
-                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
-            case "bottom left":
+            case "bottomLeft":
             case "left":
-            case "top left":
+            case "topLeft":
                 render.setID(ID);
                 render.setXDimension(6.944);
                 render.setYDimension(2.917);
@@ -86,10 +90,6 @@ public class BoxBlue extends SpriteCharacter {
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
-                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
                 break;
             case "top":
@@ -113,15 +113,11 @@ public class BoxBlue extends SpriteCharacter {
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
-                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
                 break;
-            case "bottom right":
+            case "bottomRight":
             case "right":
-            case "top right":
+            case "topRight":
                 render.setID(ID);
                 render.setXDimension(6.889);
                 render.setYDimension(3);
@@ -142,10 +138,6 @@ public class BoxBlue extends SpriteCharacter {
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
-                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
                 break;
             case "bottom":
@@ -169,10 +161,6 @@ public class BoxBlue extends SpriteCharacter {
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
-                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
                 break;
             case "idle":
@@ -196,15 +184,7 @@ public class BoxBlue extends SpriteCharacter {
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
-                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
-                break;
-            case "inherit":
-                render = new Sprite();
-                refreshCharacter("idle");
                 break;
             case "init":
             default:
@@ -214,6 +194,9 @@ public class BoxBlue extends SpriteCharacter {
                 refreshCharacter("idle");
                 controller.setXPos(width / 2 - render.getSpriteWidth() / 2);
                 controller.setYPos(height / 2 - render.getSpriteHeight() / 2);
+                render.setXCurrentFrame(0);
+                render.setYCurrentFrame(0);
+                render.setCurrentFrame(0);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
         }
@@ -254,6 +237,7 @@ public class BoxBlue extends SpriteCharacter {
                         if(render.getMethod().equals("once")) {
                             refreshCharacter("idle");
                             controller.setReacting(false);
+                            count = 0;
                         }
                         else if(render.getMethod().equals("mirror") || render.getMethod().equals("poked")) {
                             render.setCurrentFrame(render.getFrameCount());
@@ -261,9 +245,12 @@ public class BoxBlue extends SpriteCharacter {
                             render.setYCurrentFrame(render.getYFrameCount() - 1);
                             count++;
                         }
+                        /* loop or idle */
                         else {
+                            controller.setReacting(false);
                             render.setYCurrentFrame(0);
                             render.setCurrentFrame(0);
+                            count = 0;
                         }
                     }
                     if (count <= 0) {
@@ -308,71 +295,10 @@ public class BoxBlue extends SpriteCharacter {
     @Override
     public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos) {
         if(touched && !controller.getReacting()) {
-            RectF boundingBox = render.getBoundingBox();
             if(yTouchedPos >= (7.5 * height / 10)) {
                 return;
             }
-            if (xTouchedPos >= boundingBox.left && xTouchedPos <= boundingBox.right) {
-                /* center of the sprite */
-                if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
-                    refreshCharacter("center");
-                    updateView();
-                    controller.setReacting(true);
-                }
-                /* top of the sprite */
-                else if (yTouchedPos < boundingBox.top) {
-                    refreshCharacter("top");
-                    updateView();
-                    controller.setReacting(true);
-                }
-                /* bottom of the sprite */
-                else if (yTouchedPos > boundingBox.bottom) {
-                    refreshCharacter("bottom");
-                    updateView();
-                    controller.setReacting(true);
-                }
-            }
-            else if (xTouchedPos < boundingBox.left) {
-                /* left side of the sprite */
-                if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
-                    refreshCharacter("left");
-                    updateView();
-                    controller.setReacting(true);
-                }
-                    /* top left side of the sprite */
-                else if (yTouchedPos < boundingBox.top) {
-                    refreshCharacter("top left");
-                    updateView();
-                    controller.setReacting(true);
-                }
-                    /* bottom right side of the sprite */
-                else if (yTouchedPos > boundingBox.bottom) {
-                    refreshCharacter("bottom right");
-                    updateView();
-                    controller.setReacting(true);
-                }
-            }
-            /* right side of the sprite */
-            else if (xTouchedPos > boundingBox.right) {
-                /* right side of the screen */
-                if (yTouchedPos >= boundingBox.top && yTouchedPos <= boundingBox.bottom) {
-                    refreshCharacter("right");
-                    updateView();
-                    controller.setReacting(true);
-                }
-                    /* top right side of the sprite */
-                else if (yTouchedPos < boundingBox.top) {
-                    refreshCharacter("top right");
-                    updateView();
-                    controller.setReacting(true);
-                }
-                    /* bottom right side of the sprite */
-                else if (yTouchedPos > boundingBox.bottom) {
-                    refreshCharacter("bottom right");
-                    updateView();
-                    controller.setReacting(true);
-                }
-            }
+            super.onTouchEvent(spriteView, entry, controllerMap, touched, xTouchedPos, yTouchedPos);
         }
     }
 

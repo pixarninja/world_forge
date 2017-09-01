@@ -7,26 +7,32 @@ import android.graphics.RectF;
 public class Background extends SpriteProp{
 
 
-    public Background(Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
+    public Background(SpriteView spriteView, Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
                             double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
                             double xDimension, double yDimension, double spriteScale,
-                            double left, double top, double right, double bottom, String method) {
+                            double left, double top, double right, double bottom, String method, SpriteController controller, String ID) {
 
-        super(res, percentOfScreen, width, height, xRes, yRes, xDelta, yDelta, xInit, yInit, xFrameCount, yFrameCount, frameCount, xDimension, yDimension, spriteScale, left, top, right, bottom, method);
+        super(spriteView, res, percentOfScreen, width, height, xRes, yRes, xDelta, yDelta, xInit, yInit, xFrameCount, yFrameCount, frameCount, xDimension, yDimension, spriteScale, left, top, right, bottom, method, controller, ID);
 
+        if(controller == null) {
+            this.controller = new SpriteController();
+        }
+        else {
+            this.controller = controller;
+        }
+        this.spriteView = spriteView;
         this.res = res;
         this.percentOfScreen = percentOfScreen;
         this.width = width;
         this.height = height;
         this.xRes = xRes;
         this.yRes = yRes;
-        controller = new SpriteController();
-        controller.setXDelta(xDelta);
-        controller.setYDelta(yDelta);
-        controller.setXInit(xInit);
-        controller.setYInit(yInit);
-        controller.setXPos(xInit);
-        controller.setYPos(yInit);
+        this.controller.setXDelta(xDelta);
+        this.controller.setYDelta(yDelta);
+        this.controller.setXInit(xInit);
+        this.controller.setYInit(yInit);
+        this.controller.setXPos(xInit);
+        this.controller.setYPos(yInit);
         this.xFrameCount = xFrameCount;
         this.yFrameCount = yFrameCount;
         this.frameCount = frameCount;
@@ -39,7 +45,7 @@ public class Background extends SpriteProp{
         this.bottom = bottom;
         this.method = method;
 
-        refreshCharacter("red");
+        refreshCharacter(ID);
 
     }
 
@@ -49,9 +55,8 @@ public class Background extends SpriteProp{
         int xSpriteRes;
         int ySpriteRes;
 
-        if (render == null) {
-            render = new Sprite();
-        }
+        /* setup sprite via parsing */
+        ID = parseID(ID);
 
         switch (ID) {
             case "red":
@@ -74,9 +79,6 @@ public class Background extends SpriteProp{
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
@@ -100,13 +102,10 @@ public class Background extends SpriteProp{
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
-            default:
+            case "blue":
                 render.setID(ID);
                 render.setXDimension(xDimension);
                 render.setYDimension(yDimension);
@@ -126,11 +125,15 @@ public class Background extends SpriteProp{
                 render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
                 render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
                 render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
+                break;
+            case "init":
+            default:
+                render = new Sprite();
+                refreshCharacter("red");
+                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
+                render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
         }
         controller.setEntity(this);
         updateBoundingBox();
@@ -139,12 +142,10 @@ public class Background extends SpriteProp{
     @Override
     public void updateView() {
 
-        render.setXCurrentFrame(0);
-        render.setYCurrentFrame(0);
-        render.setCurrentFrame(0);
         controller.setXPos(controller.getXPos() + controller.getXDelta());
         controller.setYPos(controller.getYPos() + controller.getYDelta());
 
+        /* loopable backgrounds */
         if(controller.getXDelta() < 0) {
             if(controller.getYDelta() < 0) {
                 if ((controller.getXPos() <= (controller.getXInit() - (render.getSpriteWidth() / 10))) || (controller.getYPos() <= (controller.getYInit() - (render.getSpriteHeight() / 10)))) {
@@ -169,11 +170,10 @@ public class Background extends SpriteProp{
             else {
                 if ((controller.getXPos() >= (controller.getXInit() - (render.getSpriteWidth() / 10))) || (controller.getYPos() >= (controller.getYInit() - (render.getSpriteHeight() / 10)))) {
                     controller.setXPos(controller.getXInit());
-                    controller.setYPos(controller.getYInit());;
+                    controller.setYPos(controller.getYInit());
                 }
             }
         }
-
         updateBoundingBox();
 
     }

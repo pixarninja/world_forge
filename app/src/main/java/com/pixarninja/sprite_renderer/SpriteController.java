@@ -1,10 +1,9 @@
 package com.pixarninja.sprite_renderer;
 
-import java.util.LinkedHashMap;
-
 public class SpriteController {
 
     private SpriteEntity entity;
+    private String transition;
     private double xInit;
     private double yInit;
     private double xPos;
@@ -18,6 +17,9 @@ public class SpriteController {
 
     public SpriteEntity getEntity() { return this.entity; }
     public void setEntity(SpriteEntity entity) { this.entity = entity; }
+
+    public String getTransition() { return this.transition; }
+    public void setTransition(String transition) { this.transition = transition; }
 
     public double getXInit() { return this.xInit; }
     public void setXInit(double xInit) { this.xInit = xInit; }
