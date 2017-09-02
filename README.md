@@ -16,21 +16,33 @@ If you would like to make a game or app that uses this form of spritesheet, clon
 
 # Class Definitions
 
+## SpriteController
+
+SpriteController is the object that holds a sprite's position, entity, and frame rate variables. The role of the SpriteController is to manage which spritesheet is shown for each sprite; sprites are able to change the spritesheet displayed through transitions, and in order to save memory only one SpriteEntity object is created per controller. Thus, the controller stores the entity currently being displayed on the screen, and also keeps track of the position and frame rate for the sprites it manages.
+
+### void makeTransition(...)
+
+Parameters: *String ID*. This method calls the refreshCharacter(ID) method on the controller's entity.
+
+### void printController()
+
+Parameters: none. This method prints information about the controller, for debugging purposes.
+
 ## SpriteEntity
 
 SpriteEntity is one of the main classes that is used by this project. It provides the foundation of all objects rendered to the screen; the SpriteProp, SpriteButton, and SpriteCharacter classes all extend the SpriteEntity class. Inside this class are the following methods:
 
 ### static Bitmap decodeSampledBitmapFromResource(...)
 
-Parameters: Resources res, int resId, int reqWidth, int reqHeight. This method is used to scale Bitmap images depending on the required width and hieght passed in.
+Parameters: *Resources res, int resId, int reqWidth, int reqHeight*. This method is used to scale Bitmap images depending on the required width and hieght passed in.
 
 ### static int calculateInSampleSize(...)
 
-Parameters: BitmapFactory.Options options, int reqWidth, int reqHeight. This is also used to scale Bitmap images, but is used to actually calculate the necessary sample size.
+Parameters: *BitmapFactory.Options options, int reqWidth, int reqHeight*. This is also used to scale Bitmap images, but is used to actually calculate the necessary sample size.
 
 ### void refreshCharacter(...)
 
-Parameters: String ID. This method should be overridden and filled with transitions. For examples on transitions, see how the sample game provides overrides to this method. See also the Transitions section of this document.
+Parameters: *String ID. This method should be overridden and filled with transitions*. For examples on transitions, see how the sample game provides overrides to this method. See also the Transitions section of this document.
 
 ### void updateView()
 
@@ -46,11 +58,11 @@ Parameters: none. This method updates the sprite frame being rendered. This meth
 
 ### String parseID(...)
 
-Parameters: String ID. This method adds functionality for parsing the transition to be rendered. This allows transitions to be inherited from or initialized, giving more control and dynamism. For examples on dynamic transitions, see the overriden refreshCharacter method in the BoxRed class.
+Parameters: *String ID*. This method adds functionality for parsing the transition to be rendered. This allows transitions to be inherited from or initialized, giving more control and dynamism. For examples on dynamic transitions, see the overriden refreshCharacter method in the BoxRed class.
 
 ### void onTouchEvent(...)
 
-Parameters: SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos. This method is called when the user touches the screen. This method is initially left empty, since not all animations will need interactions. Different interactions have been modeled to create the sample game.
+Parameters: *SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos*. This method is called when the user touches the screen. This method is initially left empty, since not all animations will need interactions. Different interactions have been modeled to create the sample game.
 
 # Transitions
 
