@@ -74,6 +74,8 @@ public class SpriteController {
         System.out.println(" - last frame change time: " + lastFrameChangeTime);
         System.out.println(" - reacting: " + reacting);
 
+        entity.getSprite().printSprite();
+
     }
 
 }

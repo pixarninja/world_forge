@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         controllerMap.put("BlueButtonController", entity.getController());
 
         /* initialize box controller */
-        entity = new BoxRed(spriteView, getResources(), 0.65, maxRes / 2, maxRes / 2, width, height, null, "init red");
+        entity = new BoxRed(spriteView, getResources(), 0.65, maxRes / 2, maxRes / 2, width, height, null, "init");
         controllerMap.put("BoxController", entity.getController());
 
         /* set frame rate for all controllers */
@@ -83,6 +83,18 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Max Heap Size: " + maxHeapSizeInMB + "MB");
         System.out.println("Avaliable Heap Size: " + availHeapSizeInMB + "MB");
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        spriteView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        spriteView.onPause();
     }
 
 }

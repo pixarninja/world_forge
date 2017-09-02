@@ -63,8 +63,6 @@ public class SpriteButton extends SpriteEntity {
         /* setup sprite via parsing */
         ID = parseID(ID);
 
-        controller.setTransition(ID);
-
         switch (ID) {
             case "off":
                 render.setID(ID);
@@ -132,6 +130,8 @@ public class SpriteButton extends SpriteEntity {
                 render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
+            case "skip":
+                break;
             case "init":
             default:
                 render = new Sprite();
@@ -139,9 +139,9 @@ public class SpriteButton extends SpriteEntity {
                 controller.setXPos(controller.getXInit() - render.getSpriteWidth() / 2);
                 controller.setYPos(controller.getYInit() - render.getSpriteHeight() / 2);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
-                render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
         }
         controller.setEntity(this);
+        controller.setTransition(ID);
         updateBoundingBox();
     }
 

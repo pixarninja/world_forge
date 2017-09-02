@@ -96,6 +96,9 @@ abstract class SpriteEntity {
 
     public void updateBoundingBox() {
 
+        /* update sprite placement on screen */
+        render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
+
         /* find percentage to place from the center outwards */
         float left = (float) (render.getXDimension() / 2 - render.getLeft()) / (float) render.getXDimension();
         float top = (float) (render.getYDimension() / 2 - render.getTop()) / (float) render.getYDimension();
@@ -150,32 +153,10 @@ abstract class SpriteEntity {
         if(expression.length == 2) {
             /* inherit from a certain sprite */
             if(expression[0].equals("inherit")) {
-                render = new Sprite();
-                render.setXCurrentFrame(controller.getEntity().getSprite().getXCurrentFrame());
-                render.setYCurrentFrame(controller.getEntity().getSprite().getYCurrentFrame());
-                render.setCurrentFrame(controller.getEntity().getSprite().getCurrentFrame());
-                render.setFrameToDraw(controller.getEntity().getSprite().getFrameToDraw());
-                return(expression[1]);
-            }
-            /* initialize a certain sprite */
-            else if(expression[0].equals("init")) {
-                render = new Sprite();
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
-                refreshCharacter(expression[1]);
-                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
-                controller.setXPos(controller.getXInit() - render.getSpriteWidth() / 2);
-                controller.setYPos(controller.getYInit() - render.getSpriteHeight() / 2);
-                return(expression[1]);
+                render = controller.getEntity().getSprite();
+                return (expression[1]);
             }
             else {
-                render = new Sprite();
-                render.setXCurrentFrame(0);
-                render.setYCurrentFrame(0);
-                render.setCurrentFrame(0);
-                controller.setXPos(controller.getXInit() - render.getSpriteWidth() / 2);
-                controller.setYPos(controller.getYInit() - render.getSpriteHeight() / 2);
                 return("init");
             }
         }

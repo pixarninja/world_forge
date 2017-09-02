@@ -58,8 +58,6 @@ public class DarkPattern extends SpriteProp{
         /* setup sprite via parsing */
         ID = parseID(ID);
 
-        controller.setTransition(ID);
-
         switch (ID) {
             case "red":
                 render.setID(ID);
@@ -127,6 +125,8 @@ public class DarkPattern extends SpriteProp{
                 render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
+            case "skip":
+                break;
             case "init":
             default:
                 render = new Sprite();
@@ -138,6 +138,7 @@ public class DarkPattern extends SpriteProp{
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
         }
         controller.setEntity(this);
+        controller.setTransition(ID);
         updateBoundingBox();
     }
 

@@ -91,28 +91,35 @@ public class SpriteView extends SurfaceView {
 
     }
 
-    /*public void onResume(){
-        isRunning = true;
-        spriteThread = new SpriteThread(render[0], this);
+    public void onResume(){
+        spriteThread = new SpriteThread(this);
+        spriteThread.setRunning(true);
         spriteThread.start();
     }
 
     public void onPause(){
+        spriteThread.setRunning(false);
         boolean retry = true;
-        isRunning = false;
         while(retry){
             try {
                 spriteThread.join();
+                spriteThread.setRunning(true);
                 retry = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-    }*/
+    }
 
     protected void drawSprite() {
 
-        Canvas canvas = getHolder().lockCanvas();
+        Canvas canvas;
+
+        try {
+            canvas = getHolder().lockCanvas();
+        } catch(IllegalStateException e) {
+            return;
+        }
 
         if(canvas != null && spriteThread.getRunning()){
             synchronized (getHolder()) {
@@ -130,8 +137,7 @@ public class SpriteView extends SurfaceView {
                         } else {
                             Sprite sprite = entity.getSprite();
                             if(sprite.getSpriteSheet() == null || sprite.getFrameToDraw() == null || sprite.getWhereToDraw() == null) {
-                                sprite.printSprite();
-                                //System.exit(1);
+                                //sprite.printSprite();
                             }
                             else {
                                 canvas.drawBitmap(sprite.getSpriteSheet(), sprite.getFrameToDraw(), sprite.getWhereToDraw(), null);
@@ -144,6 +150,8 @@ public class SpriteView extends SurfaceView {
         try {
             getHolder().unlockCanvasAndPost(canvas);
         } catch(IllegalStateException e) {
+            return;
+        } catch(IllegalArgumentException e) {
             return;
         }
 
