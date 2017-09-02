@@ -1,6 +1,6 @@
 # Sprite Renderer for Android Studio
 
-This repository contains a simple implementation of a "sprite renderer" for Android Studio. Android Studio does not provide it's users with any innate sprite rendering/animation capabilities; it allows users to use the Bitmap, SurfaceView, and ImageView classes, however there is no package that contains a complete way to use spritesheets. This project is intended to provide users with that ability.
+This repository contains a simple implementation of a "sprite renderer" for Android Studio. Android Studio does not provide it's users with any innate sprite rendering/animation capabilities; it allows users to use the Bitmap, SurfaceView, and ImageView classes, however there is no package that contains a complete way to use spritesheets. This project is intended to provide users with that ability. If you would like a reference as to how the sprites are setup and rendered to the screen, see [Coding Android Sprite Sheet Animations](http://gamecodeschool.com/android/coding-android-sprite-sheet-animations/), which is a reference I used when writing the code for this project.
 
 # What Is "Sprite Rendering"?
 
@@ -14,11 +14,31 @@ If you would like to make a game or app that uses this form of spritesheet, clon
 
 ![SampleGame](/source/Photoshop/sample_game_description.png)
 
+# Rendering Scenes
+
+This project utilizes many different objects to render a scene. In a general sense, there is a controllerMap variable that keeps track of all the SpriteController objects stored there. If you would like to render a character, button, or prop to the screen, you must create a new SpriteController, assign it an appropriate SpriteEntity object, and add it to the controllerMap. Each SpriteEntity object makes use of transitions (implemented inside of the refreshCharacter() method) to decide the properties of the Sprite that will be rendered to the screen. For example, the SpriteButton's refreshCharacter() method will swap from an "off" spritesheet to an "on" spritesheet when the button is pressed. The SpriteThread will draw the sprites to the screen in increments of a frame rate, which is set in the SpriteView.
+
 # Class Definitions
+
+## SpriteView
+
+SpriteView is the class that forms the basis for rendering sprites on an Android device. The class extends SurfaceView, and implements all methods needed to make it a reputable View class. The SpriteView is responsible for keeping track of the SpriteThread (see below), and calling the onTouch() methods for each SpriteEntity in the hashmap of Controller objects.
+
+### void initView()
+
+Parameters: none. This method starts a new SpriteThread, and sets up what is needed for the surface of the SpriteView to be rendered. This includes implementing surfaceCreated, surfaceChanged, and surfaceDestroyed methods for the Holder of the SpriteView.
+
+### void drawSprite()
+
+Parameters: none. This method renders each SpriteEntity in the hashmap of Controller objects; objects are rendered from index 0 onwards, so the order at which they are added to the hashmap matters! This method should only be called from the SpriteThread whenever the time has met or surpassed the frame rate.
+
+### boolean onTouchEvent(...)
+
+Parameters: *MotionEvent event*. This method is activated whenever the screen is touched by the user. After the user touches the screen, this method activates the onTouchEvent for each SpriteEntity stored in the hasmap of Controller objects. This implementation can be editted to call each SpriteEntity's onTouchEvent() method with specific flags or other information. See Android's [MotionEvent documentation](https://developer.android.com/reference/android/view/MotionEvent.html) for more information on how to edit this function.
 
 ## SpriteController
 
-SpriteController is the object that holds a sprite's position, entity, and frame rate variables. The role of the SpriteController is to manage which spritesheet is shown for each sprite; sprites are able to change the spritesheet displayed through transitions, and in order to save memory only one SpriteEntity object is created per controller. Thus, the controller stores the entity currently being displayed on the screen, and also keeps track of the position and frame rate for the sprites it manages.
+SpriteController is the object that holds an animation's position, sprite, and frame rate variables. The role of the SpriteController is to manage which spritesheet is shown for each sprite; sprites are able to change the spritesheet displayed through transitions, and in order to save memory only one SpriteEntity object is created per controller. Thus, the controller stores the entity currently being displayed on the screen, and also keeps track of the position and frame rate for the sprites it manages.
 
 ### void makeTransition(...)
 
@@ -50,7 +70,7 @@ Parameters: none. This method can be overrided to proved extra implementation. T
 
 ### void updateBoundingBox()
 
-Parameters: none. This method updates the spritesheet's bounding box, which controls how the user interacts with the sprite.
+Parameters: none. This method updates the spritesheet's positing on the screen and the bounding box, which controls how the user interacts with the sprite.
 
 ### void getCurrentFrame()
 
