@@ -3,65 +3,52 @@ package com.pixarninja.sprite_renderer;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.provider.Settings;
 
 public class LightPattern extends SpriteProp{
 
 
-    public LightPattern(SpriteView spriteView, Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
-                        double xDelta, double yDelta, int xInit, int yInit, int xFrameCount, int yFrameCount, int frameCount,
-                        double xDimension, double yDimension, double spriteScale,
-                        double left, double top, double right, double bottom, String method, SpriteController controller, String ID) {
+    public LightPattern(SpriteView spriteView, Resources res, int width, int height, int xRes, int yRes, String ID, String transition) {
 
-        super(spriteView, res, percentOfScreen, width, height, xRes, yRes, xDelta, yDelta, xInit, yInit, xFrameCount, yFrameCount, frameCount, xDimension, yDimension, spriteScale, left, top, right, bottom, method, controller, ID);
+        super();
 
-        if(controller == null) {
-            this.controller = new SpriteController();
-        }
-        else {
-            this.controller = controller;
-        }
+        this.controller = new SpriteController();
+
+        this.controller.setID(ID);
         this.spriteView = spriteView;
         this.res = res;
-        this.percentOfScreen = percentOfScreen;
         this.width = width;
         this.height = height;
         this.xRes = xRes;
         this.yRes = yRes;
-        this.controller.setXDelta(xDelta);
-        this.controller.setYDelta(yDelta);
-        this.controller.setXInit(xInit);
-        this.controller.setYInit(yInit);
-        this.controller.setXPos(xInit);
-        this.controller.setYPos(yInit);
-        this.xFrameCount = xFrameCount;
-        this.yFrameCount = yFrameCount;
-        this.frameCount = frameCount;
-        this.xDimension = xDimension;
-        this.yDimension = yDimension;
-        this.spriteScale = spriteScale;
-        this.left = left;
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
-        this.method = method;
+        this.controller.setXDelta(0.5);
+        this.controller.setYDelta(-0.5);
+        this.controller.setXInit(-500);
+        this.controller.setYInit(0);
+        this.controller.setXPos(-500);
+        this.controller.setYPos(0);
+        this.xDimension = 1;
+        this.yDimension = 1;
+        this.left = 0;
+        this.top = 0;
+        this.right = 1;
+        this.bottom = 1;
 
-        refreshCharacter(ID);
+        refreshEntity(transition);
 
     }
 
     @Override
-    public void refreshCharacter(String ID) {
+    public void refreshEntity(String transition) {
 
         int xSpriteRes;
         int ySpriteRes;
 
         /* setup sprite via parsing */
-        ID = parseID(ID);
+        transition = parseID(transition);
 
-        switch (ID) {
+        switch (transition) {
             case "red":
-                render.setID(ID);
+                render.setTransition(transition);
                 render.setXDimension(xDimension);
                 render.setYDimension(yDimension);
                 render.setLeft(left);
@@ -72,18 +59,20 @@ public class LightPattern extends SpriteProp{
                 render.setYFrameCount(1);
                 render.setFrameCount(1);
                 render.setMethod("loop");
-                xSpriteRes = 2 * xRes / render.getXFrameCount();
-                ySpriteRes = 2 * yRes / render.getYFrameCount();
+                render.setDirection("forwards");
+                xSpriteRes = xRes * render.getXFrameCount();
+                ySpriteRes = yRes * render.getYFrameCount();
+                spriteScale = 5;
                 render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.light_pattern_red, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
                 render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
                 render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
-                render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
-                render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
-                render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
+                render.setFrameScale((width * spriteScale) / (double)render.getFrameWidth()); // scale = goal width / original width
+                render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale())); // width = original width * scale
+                render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale())); // height = original height * scale
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
             case "green":
-                render.setID(ID);
+                render.setTransition(transition);
                 render.setXDimension(xDimension);
                 render.setYDimension(yDimension);
                 render.setLeft(left);
@@ -94,18 +83,20 @@ public class LightPattern extends SpriteProp{
                 render.setYFrameCount(1);
                 render.setFrameCount(1);
                 render.setMethod("loop");
-                xSpriteRes = 2 * xRes / render.getXFrameCount();
-                ySpriteRes = 2 * yRes / render.getYFrameCount();
+                render.setDirection("forwards");
+                xSpriteRes = xRes * render.getXFrameCount();
+                ySpriteRes = yRes * render.getYFrameCount();
+                spriteScale = 5;
                 render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.light_pattern_green, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
                 render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
                 render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
-                render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
-                render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
-                render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
+                render.setFrameScale((width * spriteScale) / (double)render.getFrameWidth()); // scale = goal width / original width
+                render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale())); // width = original width * scale
+                render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale())); // height = original height * scale
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
             case "blue":
-                render.setID(ID);
+                render.setTransition(transition);
                 render.setXDimension(xDimension);
                 render.setYDimension(yDimension);
                 render.setLeft(left);
@@ -116,14 +107,16 @@ public class LightPattern extends SpriteProp{
                 render.setYFrameCount(1);
                 render.setFrameCount(1);
                 render.setMethod("loop");
-                xSpriteRes = 2 * xRes / render.getXFrameCount();
-                ySpriteRes = 2 * yRes / render.getYFrameCount();
+                render.setDirection("forwards");
+                xSpriteRes = xRes * render.getXFrameCount();
+                ySpriteRes = yRes * render.getYFrameCount();
+                spriteScale = 5;
                 render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.light_pattern_blue, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
                 render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
                 render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
-                render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
-                render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
-                render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
+                render.setFrameScale((width * spriteScale) / (double)render.getFrameWidth()); // scale = goal width / original width
+                render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale())); // width = original width * scale
+                render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale())); // height = original height * scale
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
             case "skip":
@@ -131,15 +124,16 @@ public class LightPattern extends SpriteProp{
             case "init":
             default:
                 render = new Sprite();
-                refreshCharacter("red");
+                refreshEntity("red");
                 render.setXCurrentFrame(0);
                 render.setYCurrentFrame(0);
                 render.setCurrentFrame(0);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float)controller.getXPos(), (float)controller.getYPos(), (float)controller.getXPos() + render.getSpriteWidth(), (float)controller.getYPos() + render.getSpriteHeight()));
         }
+        controller.setTransition(transition);
         controller.setEntity(this);
-        controller.setTransition(ID);
+        controller.setTransition(transition);
         updateBoundingBox();
     }
 

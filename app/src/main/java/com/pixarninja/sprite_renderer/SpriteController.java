@@ -2,18 +2,23 @@ package com.pixarninja.sprite_renderer;
 
 public class SpriteController {
 
-    private SpriteEntity entity;
+    private String ID;
     private String transition;
+    private SpriteEntity entity;
     private double xInit;
     private double yInit;
     private double xPos;
     private double yPos;
-    private double xDelta;
-    private double yDelta;
+    private volatile double xDelta;
+    private volatile double yDelta;
     private int frameLengthInMilliseconds = 35;
     private long lastFrameChangeTime;
-    private boolean reacting;
+    private boolean reacting = false;
+    private boolean alive = true;
 
+
+    public String getID() { return this.ID; }
+    public void setID(String ID) { this.ID = ID; }
 
     public SpriteEntity getEntity() { return this.entity; }
     public void setEntity(SpriteEntity entity) { this.entity = entity; }
@@ -56,13 +61,12 @@ public class SpriteController {
     public boolean getReacting() { return this.reacting; }
     public void setReacting(boolean reacting) { this.reacting = reacting; }
 
-    public void makeTransition(String ID) {
-        this.entity.refreshCharacter(ID);
-    }
+    public boolean getAlive() { return this.alive; }
+    public void setAlive(boolean alive) { this.alive = alive; }
 
     public void printController() {
 
-        System.out.println("Info of controller :");
+        System.out.println("Info of controller " + ID + ":");
         System.out.println(" - entity: " + entity);
         System.out.println(" - x initial position: " + xInit);
         System.out.println(" - y initial position: " + yInit);
@@ -73,8 +77,6 @@ public class SpriteController {
         System.out.println(" - frame rate: " + frameLengthInMilliseconds);
         System.out.println(" - last frame change time: " + lastFrameChangeTime);
         System.out.println(" - reacting: " + reacting);
-
-        entity.getSprite().printSprite();
 
     }
 

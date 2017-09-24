@@ -10,15 +10,12 @@ public class SpriteProp extends SpriteEntity {
     int propID;
 
     /* for extending the class */
-    public SpriteProp(SpriteView spriteView, Resources res, double percentOfScreen, int width, int height, int xRes, int yRes,
-                      double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
-                      double xDimension, double yDimension, double spriteScale,
-                      double left, double top, double right, double bottom, String method, SpriteController controller, String ID) {}
+    public SpriteProp() {}
 
-    public SpriteProp(SpriteView spriteView, Resources res, double percentOfScreen, int width, int height, int xRes, int yRes, int propID,
+    public SpriteProp(SpriteView spriteView, Resources res, double spriteScale, int width, int height, int xRes, int yRes, int propID,
                       double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
-                      double xDimension, double yDimension, double spriteScale,
-                      double left, double top, double right, double bottom, String method, SpriteController controller, String ID) {
+                      double xDimension, double yDimension,
+                      double left, double top, double right, double bottom, String method, String direction, SpriteController controller, String ID, String transition) {
 
         if(controller == null) {
             this.controller = new SpriteController();
@@ -26,9 +23,10 @@ public class SpriteProp extends SpriteEntity {
         else {
             this.controller = controller;
         }
+        this.controller.setID(ID);
         this.spriteView = spriteView;
         this.res = res;
-        this.percentOfScreen = percentOfScreen;
+        this.spriteScale = spriteScale;
         this.width = width;
         this.height = height;
         this.xRes = xRes;
@@ -45,30 +43,30 @@ public class SpriteProp extends SpriteEntity {
         this.frameCount = frameCount;
         this.xDimension = xDimension;
         this.yDimension = yDimension;
-        this.spriteScale = spriteScale;
         this.left = left;
         this.top = top;
         this.right = right;
         this.bottom = bottom;
         this.method = method;
+        this.direction = direction;
 
-        refreshCharacter(ID);
+        refreshEntity(transition);
 
     }
 
     @Override
-    public void refreshCharacter(String ID) {
+    public void refreshEntity(String transition) {
 
         int xSpriteRes;
         int ySpriteRes;
 
-        switch (ID) {
+        switch (transition) {
             case "skip":
                 break;
             case "init":
             default:
                 render = new Sprite();
-                render.setID(ID);
+                render.setTransition(transition);
                 render.setXDimension(xDimension);
                 render.setYDimension(yDimension);
                 render.setLeft(left);
@@ -79,22 +77,24 @@ public class SpriteProp extends SpriteEntity {
                 render.setYFrameCount(yFrameCount);
                 render.setFrameCount(frameCount);
                 render.setMethod(method);
-                xSpriteRes = 2 * xRes / render.getXFrameCount();
-                ySpriteRes = 2 * yRes / render.getYFrameCount();
+                render.setDirection(direction);
+                xSpriteRes = xRes * render.getXFrameCount();
+                ySpriteRes = yRes * render.getYFrameCount();
                 render.setSpriteSheet(decodeSampledBitmapFromResource(res, propID, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
                 render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
                 render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
-                render.setFrameScale(spriteScale * height * percentOfScreen / render.getFrameHeight());
-                render.setSpriteWidth((int) (render.getFrameWidth() * render.getFrameScale()));
-                render.setSpriteHeight((int) (render.getFrameHeight() * render.getFrameScale()));
+                render.setFrameScale((width * spriteScale) / (double)render.getFrameWidth()); // scale = goal width / original width
+                render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale())); // width = original width * scale
+                render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale())); // height = original height * scale
                 render.setXCurrentFrame(0);
                 render.setYCurrentFrame(0);
                 render.setCurrentFrame(0);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
         }
+        controller.setTransition(transition);
         controller.setEntity(this);
-        controller.setTransition(ID);
+        controller.setTransition(transition);
         updateBoundingBox();
     }
 

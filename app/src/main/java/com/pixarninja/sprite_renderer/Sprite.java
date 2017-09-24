@@ -6,7 +6,7 @@ import android.graphics.RectF;
 
 public class Sprite {
 
-    private String ID;
+    private String transition;
     private Bitmap spriteSheet;
     private int xFrameCount;
     private int yFrameCount;
@@ -28,13 +28,14 @@ public class Sprite {
     double right;
     double bottom;
     private RectF boundingBox;
+    private String direction;
     private String method;
 
 
     public Sprite() {}
 
-    public String getID() { return this.ID; }
-    public void setID(String ID) { this.ID = ID; }
+    public String getTransition() { return this.transition; }
+    public void setTransition(String ID) { this.transition = transition; }
 
     public Bitmap getSpriteSheet() {
         return this.spriteSheet;
@@ -167,6 +168,13 @@ public class Sprite {
         this.boundingBox = boundingBox;
     }
 
+    public String getDirection() {
+        return this.direction;
+    }
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
     public String getMethod() {
         return this.method;
     }
@@ -176,7 +184,8 @@ public class Sprite {
 
     public void printSprite() {
 
-        System.out.println("Info of sprite " + ID + ":");
+        System.out.println("Info of sprite:");
+        System.out.println(" - transition: " + transition);
         System.out.println(" - sprite sheet: " + spriteSheet);
         System.out.println(" - x dimension: " + xDimension);
         System.out.println(" - y dimension: " + yDimension);
@@ -184,6 +193,7 @@ public class Sprite {
         System.out.println(" - top: " + top);
         System.out.println(" - right: " + right);
         System.out.println(" - bottom: " + bottom);
+        System.out.println(" - direction: " + direction);
         System.out.println(" - method: " + method);
         System.out.println(" - current frame: " + currentFrame);
         System.out.println(" - x current frame: " + xCurrentFrame);

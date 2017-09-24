@@ -9,6 +9,8 @@ import java.util.LinkedHashMap;
 
 abstract class SpriteEntity {
 
+    protected int count = 0;
+    protected int delta = 1;
     protected Resources res;
     protected double percentOfScreen;
     protected int xRes;
@@ -26,8 +28,7 @@ abstract class SpriteEntity {
     protected double right;
     protected double bottom;
     protected String method;
-
-    protected String message;
+    protected String direction;
     protected SpriteController controller;
     protected Sprite render;
     protected SpriteView spriteView;
@@ -35,11 +36,14 @@ abstract class SpriteEntity {
     public Sprite getSprite() { return this.render; }
     public void setSprite(Sprite sprite) { this.render = sprite; }
 
-    public String getMessage() { return this.message; }
-    public void setMessage(String message) { this.message = message; }
-
     public SpriteController getController() { return this.controller; }
     public void setController(SpriteController controller) { this.controller = controller; }
+
+    public int getCount() { return this.count; }
+    public void setCount(int count) { this.count = count; }
+
+    public int getDelta() { return this.delta; }
+    public void setDelta(int delta) { this.delta = delta; }
 
     protected static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
 
@@ -70,7 +74,7 @@ abstract class SpriteEntity {
             final int halfWidth = width / 2;
 
             /* calculate the largest inSampleSize value that is a power of 2 and keeps both
-               height and width larger than the requested height and width. */
+               height and width larger than the requested height and width */
             while ((halfHeight / inSampleSize) >= reqHeight
                     && (halfWidth / inSampleSize) >= reqWidth) {
                 inSampleSize *= 2;
@@ -81,7 +85,7 @@ abstract class SpriteEntity {
 
     }
 
-    public void refreshCharacter(String ID) {
+    public void refreshEntity(String ID) {
         render = new Sprite();
     }
 
@@ -89,6 +93,8 @@ abstract class SpriteEntity {
 
         controller.setXPos(controller.getXPos() + controller.getXDelta());
         controller.setYPos(controller.getYPos() + controller.getYDelta());
+
+        render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
         getCurrentFrame();
         updateBoundingBox();
 
@@ -125,15 +131,189 @@ abstract class SpriteEntity {
         if ( time > controller.getLastFrameChangeTime() + controller.getFrameRate()) {
 
             controller.setLastFrameChangeTime(time);
-            render.setCurrentFrame(render.getCurrentFrame() + 1);
-            render.setXCurrentFrame(render.getXCurrentFrame() + 1);
-            if ((render.getXCurrentFrame() >= render.getXFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
-                render.setYCurrentFrame(render.getYCurrentFrame() + 1);
-                if ((render.getYCurrentFrame() >= render.getYFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
-                    render.setYCurrentFrame(0);
-                    render.setCurrentFrame(0);
+
+            if(render.getDirection().equals("backwards")) {
+                if(count == 0) {
+                    delta = -1;
                 }
-                render.setXCurrentFrame(0);
+                else {
+                    delta = 1;
+                }
+
+                if(delta < 0) {
+                    render.setCurrentFrame(render.getCurrentFrame() + delta);
+                    render.setXCurrentFrame(render.getXCurrentFrame() + delta);
+                    if ((render.getXCurrentFrame() < 0) || (render.getCurrentFrame() < 0)) {
+                        render.setYCurrentFrame(render.getYCurrentFrame() + delta);
+                        if ((render.getYCurrentFrame() < 0) || (render.getCurrentFrame() < 0)) {
+                            if(render.getMethod().equals("die")) {
+                                controller.setAlive(false);
+                                count = 0;
+                            }
+                            else if(render.getMethod().equals("once")) {
+                                refreshEntity("idle");
+                                count = 0;
+                            }
+                            else if(render.getMethod().equals("mirror") || render.getMethod().equals("poked")) {
+                                render.setCurrentFrame(render.getFrameCount() - 1);
+                                render.setXCurrentFrame(render.getXFrameCount() - 1);
+                                render.setYCurrentFrame(render.getYFrameCount() - 1);
+                                count++;
+                            }
+                            /* loop or idle */
+                            else {
+                                render.setYCurrentFrame(render.getXFrameCount() - 1);
+                                render.setCurrentFrame(render.getFrameCount() - 1);
+                                count = 0;
+                            }
+                        }
+                        if (count <= 0) {
+                            render.setXCurrentFrame(render.getXFrameCount() - 1);
+                        }
+                    }
+                }
+                else if (delta == 0) {
+                    render.setCurrentFrame(0);
+                    render.setXCurrentFrame(0);
+                    render.setYCurrentFrame(0);
+                    count++;
+                }
+                else {
+                    render.setCurrentFrame(render.getCurrentFrame() + delta);
+                    render.setXCurrentFrame(render.getXCurrentFrame() + delta);
+                    if ((render.getXCurrentFrame() >= render.getXFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                        render.setYCurrentFrame(render.getYCurrentFrame() + delta);
+                        if ((render.getYCurrentFrame() >= render.getYFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                            refreshEntity("idle");
+                            count = 0;
+                        }
+                        if (count > 0) {
+                            render.setXCurrentFrame(0);
+                        }
+                    }
+                }
+            }
+
+            else if(render.getDirection().equals("flipped")) {
+                if(count == 0) {
+                    delta = -1;
+                }
+                else {
+                    delta = 1;
+                }
+
+                if(delta < 0) {
+                    render.setCurrentFrame(render.getCurrentFrame() - delta);
+                    render.setXCurrentFrame(render.getXCurrentFrame() + delta);
+                    if ((render.getXCurrentFrame() < 0) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                        render.setYCurrentFrame(render.getYCurrentFrame() - delta);
+                        if ((render.getYCurrentFrame() >= render.getYFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                            if(render.getMethod().equals("die")) {
+                                controller.setAlive(false);
+                                count = 0;
+                            }
+                            else if(render.getMethod().equals("once")) {
+                                refreshEntity("idle");
+                                count = 0;
+                            }
+                            else if(render.getMethod().equals("mirror") || render.getMethod().equals("mirror loop") || render.getMethod().equals("poked")) {
+                                render.setCurrentFrame(0);
+                                render.setXCurrentFrame(0);
+                                render.setYCurrentFrame(render.getYFrameCount() - 1);
+                                count++;
+                            }
+                            /* loop or idle */
+                            else {
+                                render.setYCurrentFrame(0);
+                                render.setCurrentFrame(0);
+                                count = 0;
+                            }
+                        }
+                        if (count <= 0) {
+                            render.setXCurrentFrame(render.getXFrameCount() - 1);
+                        }
+                    }
+                }
+                else if (delta == 0) {
+                    render.setCurrentFrame(0);
+                    render.setXCurrentFrame(render.getXFrameCount() - 1);
+                    render.setYCurrentFrame(render.getYFrameCount() - 1);
+                    count++;
+                }
+                else {
+                    render.setCurrentFrame(render.getCurrentFrame() + delta);
+                    render.setXCurrentFrame(render.getXCurrentFrame() + delta);
+                    if ((render.getXCurrentFrame() >= render.getXFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                        render.setYCurrentFrame(render.getYCurrentFrame() - delta);
+                        if ((render.getYCurrentFrame() >= render.getYFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                            refreshEntity("idle");
+                            count = 0;
+                            render.setXCurrentFrame(render.getXFrameCount() - 1);
+                        }
+                    }
+                }
+            }
+
+            else {
+                if(count == 0) {
+                    delta = 1;
+                }
+                else {
+                    delta = -1;
+                }
+
+                if(delta > 0) {
+                    render.setCurrentFrame(render.getCurrentFrame() + delta);
+                    render.setXCurrentFrame(render.getXCurrentFrame() + delta);
+                    if ((render.getXCurrentFrame() >= render.getXFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                        render.setYCurrentFrame(render.getYCurrentFrame() + delta);
+                        if ((render.getYCurrentFrame() >= render.getYFrameCount()) || (render.getCurrentFrame() >= render.getFrameCount())) {
+                            if(render.getMethod().equals("die")) {
+                                controller.setAlive(false);
+                                count = 0;
+                            }
+                            else if(render.getMethod().equals("once")) {
+                                refreshEntity("idle");
+                                count = 0;
+                            }
+                            else if(render.getMethod().equals("mirror") || render.getMethod().equals("mirror loop") || render.getMethod().equals("poked")) {
+                                render.setCurrentFrame(render.getFrameCount() - 1);
+                                render.setXCurrentFrame(render.getXFrameCount() - 1);
+                                render.setYCurrentFrame(render.getYFrameCount() - 1);
+                                count++;
+                            }
+                            /* loop or idle */
+                            else {
+                                render.setYCurrentFrame(0);
+                                render.setCurrentFrame(0);
+                                count = 0;
+                            }
+                        }
+                        if (count <= 0) {
+                            render.setXCurrentFrame(0);
+                        }
+                    }
+                }
+                else if (delta == 0) {
+                    render.setCurrentFrame(render.getFrameCount());
+                    render.setXCurrentFrame(render.getXFrameCount() - 1);
+                    render.setYCurrentFrame(render.getYFrameCount() - 1);
+                    count++;
+                }
+                else {
+                    render.setCurrentFrame(render.getCurrentFrame() + delta);
+                    render.setXCurrentFrame(render.getXCurrentFrame() + delta);
+                    if ((render.getXCurrentFrame() < 0) || (render.getCurrentFrame() < 0)) {
+                        render.setYCurrentFrame(render.getYCurrentFrame() + delta);
+                        if ((render.getYCurrentFrame() < 0) || (render.getCurrentFrame() < 0)) {
+                            refreshEntity("idle");
+                            count = 0;
+                        }
+                        if (count > 0) {
+                            render.setXCurrentFrame(render.getXFrameCount() - 1);
+                        }
+                    }
+                }
             }
 
         }
@@ -154,7 +334,7 @@ abstract class SpriteEntity {
             /* inherit from a certain sprite */
             if(expression[0].equals("inherit")) {
                 render = controller.getEntity().getSprite();
-                return (expression[1]);
+                return(expression[1]);
             }
             else {
                 return("init");
@@ -169,6 +349,8 @@ abstract class SpriteEntity {
         }
     }
 
-    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean touched, float xTouchedPos, float yTouchedPos) {}
+    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean poke, boolean move, boolean jump, float xTouchedPos, float yTouchedPos) { }
+
+    public LinkedHashMap<String, SpriteController> onCollisionEvent(LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap) { return new LinkedHashMap<>(); }
 
 }

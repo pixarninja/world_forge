@@ -16,7 +16,7 @@ If you would like to make a game or app that uses this form of spritesheet, clon
 
 # Rendering Scenes
 
-This project utilizes many different objects to render a scene. In a general sense, there is a controllerMap variable that keeps track of all the SpriteController objects stored there. If you would like to render a character, button, or prop to the screen, you must create a new SpriteController, assign it an appropriate SpriteEntity object, and add it to the controllerMap. Each SpriteEntity object makes use of transitions (implemented inside of the refreshCharacter() method) to decide the properties of the Sprite that will be rendered to the screen. For example, the SpriteButton's refreshCharacter() method will swap from an "off" spritesheet to an "on" spritesheet when the button is pressed. The SpriteThread will draw the sprites to the screen in increments of a frame rate, which is set in the SpriteView.
+This project utilizes many different objects to render a scene. In a general sense, there is a controllerMap variable that keeps track of all the SpriteController objects stored there. If you would like to render a character, button, or prop to the screen, you must create a new SpriteController, assign it an appropriate SpriteEntity object, and add it to the controllerMap. Each SpriteEntity object makes use of transitions (implemented inside of the refreshEntity() method) to decide the properties of the Sprite that will be rendered to the screen. For example, the SpriteButton's refreshEntity() method will swap from an "off" spritesheet to an "on" spritesheet when the button is pressed. The SpriteThread will draw the sprites to the screen in increments of a frame rate, which is set in the SpriteView.
 
 # Class Definitions
 
@@ -42,7 +42,7 @@ SpriteController is the object that holds an animation's position, sprite, and f
 
 ### void makeTransition(...)
 
-Parameters: *String ID*. This method calls the refreshCharacter(ID) method on the controller's entity.
+Parameters: *String ID*. This method calls the refreshEntity(ID) method on the controller's entity.
 
 ### void printController()
 
@@ -60,7 +60,7 @@ Parameters: *Resources res, int resId, int reqWidth, int reqHeight*. This method
 
 Parameters: *BitmapFactory.Options options, int reqWidth, int reqHeight*. This is also used to scale Bitmap images, but is used to actually calculate the necessary sample size.
 
-### void refreshCharacter(...)
+### void refreshEntity(...)
 
 Parameters: *String ID. This method should be overridden and filled with transitions*. For examples on transitions, see how the sample game provides overrides to this method. See also the Transitions section of this document.
 
@@ -78,7 +78,7 @@ Parameters: none. This method updates the sprite frame being rendered. This meth
 
 ### String parseID(...)
 
-Parameters: *String ID*. This method adds functionality for parsing the transition to be rendered. This allows transitions to be inherited from or initialized, giving more control and dynamism. For examples on dynamic transitions, see the overriden refreshCharacter method in the BoxRed class.
+Parameters: *String ID*. This method adds functionality for parsing the transition to be rendered. This allows transitions to be inherited from or initialized, giving more control and dynamism. For examples on dynamic transitions, see the overriden refreshEntity method in the BoxRed class.
 
 ### void onTouchEvent(...)
 

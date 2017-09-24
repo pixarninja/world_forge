@@ -30,40 +30,39 @@ public class MainActivity extends AppCompatActivity {
         spriteThread.start();
         spriteView.setSpriteThread(spriteThread);
 
+        /* width and height are multiplied by the factor the SpriteView is set in comparison to the screen */
         int height = (int)(displayMetrics.heightPixels * 0.8);
-        int maxRes = height * 2;
-        int width = (int)(displayMetrics.widthPixels);
+        int width = (int)(displayMetrics.widthPixels * 1.0);
+        int maxRes = width / 2;
 
         /* background */
         spriteView.setBackgroundResource(R.drawable.background_red);
 
         /* dark pattern */
-        entity = new DarkPattern(spriteView, getResources(), 3, width, height, (int)(maxRes * 0.4), (int)(maxRes * 0.4),
-                -1, 1, 0, -500, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "init");
+        entity = new DarkPattern(spriteView, getResources(), width, height, maxRes, maxRes, "dark pattern", "init");
         controllerMap.put("DarkPatternController", entity.getController());
 
         /* light pattern */
-        entity = new LightPattern(spriteView, getResources(), 3, width, height, (int)(maxRes * 0.4), (int)(maxRes * 0.4),
-                1, -1, -500, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "init");
+        entity = new LightPattern(spriteView, getResources(), width, height, maxRes, maxRes, "light pattern", "init");
         controllerMap.put("LightPatternController", entity.getController());
 
         /* red button */
-        entity = new SpriteButton(spriteView, getResources(), 0.1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_red_on, R.mipmap.button_red_off, R.mipmap.button_red_off,
-                0, 0, (0.75 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "init on");
+        entity = new SpriteButton(spriteView, getResources(), 0.17, width, height, maxRes, maxRes, R.mipmap.button_red_on, R.mipmap.button_red_off, R.mipmap.button_red_off,
+                0, 0, (0.75 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "red button", "init on");
         controllerMap.put("RedButtonController", entity.getController());
 
         /* green button */
-        entity = new SpriteButton(spriteView, getResources(), 0.1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_green_on, R.mipmap.button_green_off, R.mipmap.button_green_off,
-                0, 0, (1.5 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "init off");
+        entity = new SpriteButton(spriteView, getResources(), 0.17, width, height, maxRes, maxRes, R.mipmap.button_green_on, R.mipmap.button_green_off, R.mipmap.button_green_off,
+                0, 0, (1.5 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "green button", "init off");
         controllerMap.put("GreenButtonController", entity.getController());
 
         /* blue button */
-        entity = new SpriteButton(spriteView, getResources(), 0.1, width, height, (int)(maxRes * 0.025), (int)(maxRes * 0.025), R.mipmap.button_blue_on, R.mipmap.button_blue_off, R.mipmap.button_blue_off,
-                0, 0, (2.25 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "init off");
+        entity = new SpriteButton(spriteView, getResources(), 0.17, width, height, maxRes, maxRes, R.mipmap.button_blue_on, R.mipmap.button_blue_off, R.mipmap.button_blue_off,
+                0, 0, (2.25 * width / 3), (8 * height / 10), 1, 1, 1, 1, 1, 0, 0, 1, 1, "loop", null, "blue button", "init off");
         controllerMap.put("BlueButtonController", entity.getController());
 
         /* initialize box controller */
-        entity = new BoxRed(spriteView, getResources(), 0.65, maxRes / 2, maxRes / 2, width, height, null, "init");
+        entity = new BoxRed(spriteView, getResources(), maxRes, maxRes, width, height, null, "red box", "init");
         controllerMap.put("BoxController", entity.getController());
 
         /* set frame rate for all controllers */
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         final long availHeapSizeInMB = maxHeapSizeInMB - usedMemInMB;
         System.out.println("Memory Used: " + usedMemInMB + "MB");
         System.out.println("Max Heap Size: " + maxHeapSizeInMB + "MB");
-        System.out.println("Avaliable Heap Size: " + availHeapSizeInMB + "MB");
+        System.out.println("Available Heap Size: " + availHeapSizeInMB + "MB");
 
     }
 
