@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class BoxRed extends SpriteCharacter {
 
-    public BoxRed(SpriteView spriteView, Resources res, int xRes, int yRes, int width, int height, SpriteController controller, String ID, String transition) {
+    public BoxRed(Resources res, int xRes, int yRes, int width, int height, SpriteController controller, String ID, String transition) {
 
         if(controller == null) {
             this.controller = new SpriteController();
@@ -19,7 +19,6 @@ public class BoxRed extends SpriteCharacter {
             this.controller = controller;
         }
         this.controller.setID(ID);
-        this.spriteView = spriteView;
         this.res = res;
         this.xRes = xRes;
         this.yRes = yRes;
@@ -217,7 +216,6 @@ public class BoxRed extends SpriteCharacter {
         }
         controller.setTransition(transition);
         controller.setEntity(this);
-        controller.setTransition(transition);
         updateBoundingBox();
     }
 

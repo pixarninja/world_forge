@@ -11,7 +11,7 @@ public class SpriteButton extends SpriteEntity {
     private int pokedID;
     private int offID;
 
-    public SpriteButton(SpriteView spriteView, Resources res, double spriteScale, int width, int height, int xRes, int yRes, int onID, int pokedID, int offID,
+    public SpriteButton(Resources res, double spriteScale, int width, int height, int xRes, int yRes, int onID, int pokedID, int offID,
                         double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
                         double xDimension, double yDimension,
                         double left, double top, double right, double bottom, String method, SpriteController controller, String ID, String transition) {
@@ -23,7 +23,6 @@ public class SpriteButton extends SpriteEntity {
             this.controller = controller;
         }
         this.controller.setID(ID);
-        this.spriteView = spriteView;
         this.res = res;
         this.spriteScale = spriteScale;
         this.width = width;
@@ -208,7 +207,7 @@ public class SpriteButton extends SpriteEntity {
                         SpriteCharacter oldBox = (SpriteCharacter) controller.getEntity();
                         transition = controller.getTransition();
                         ID = "inherit " + transition;
-                        SpriteCharacter newBox = new BoxRed(spriteView, oldBox.res, oldBox.xRes, oldBox.yRes, width, height, controller, "red box", ID);
+                        SpriteCharacter newBox = new BoxRed(oldBox.res, oldBox.xRes, oldBox.yRes, width, height, controller, "red box", ID);
                         newBox.setCount(oldBox.getCount());
                         newBox.setDelta(oldBox.getDelta());
                         controller.setEntity(newBox);
@@ -262,7 +261,7 @@ public class SpriteButton extends SpriteEntity {
                         SpriteCharacter oldBox = (SpriteCharacter) controller.getEntity();
                         transition = controller.getTransition();
                         ID = "inherit " + transition;
-                        SpriteCharacter newBox = new BoxGreen(spriteView, oldBox.res, oldBox.xRes, oldBox.yRes, width, height, controller, "green box", ID);
+                        SpriteCharacter newBox = new BoxGreen(oldBox.res, oldBox.xRes, oldBox.yRes, width, height, controller, "green box", ID);
                         newBox.setCount(oldBox.getCount());
                         newBox.setDelta(oldBox.getDelta());
                         controller.setEntity(newBox);
@@ -316,7 +315,7 @@ public class SpriteButton extends SpriteEntity {
                         SpriteCharacter oldBox = (SpriteCharacter) controller.getEntity();
                         transition = oldBox.getController().getTransition();
                         ID = "inherit " + transition;
-                        SpriteCharacter newBox = new BoxBlue(spriteView, oldBox.res, oldBox.xRes, oldBox.yRes, width, height, controller, "blue box", ID);
+                        SpriteCharacter newBox = new BoxBlue(oldBox.res, oldBox.xRes, oldBox.yRes, width, height, controller, "blue box", ID);
                         newBox.setCount(oldBox.getCount());
                         newBox.setDelta(oldBox.getDelta());
                         controller.setEntity(newBox);

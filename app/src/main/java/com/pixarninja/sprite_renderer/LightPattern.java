@@ -7,14 +7,13 @@ import android.graphics.RectF;
 public class LightPattern extends SpriteProp{
 
 
-    public LightPattern(SpriteView spriteView, Resources res, int width, int height, int xRes, int yRes, String ID, String transition) {
+    public LightPattern(Resources res, int width, int height, int xRes, int yRes, String ID, String transition) {
 
         super();
 
         this.controller = new SpriteController();
 
         this.controller.setID(ID);
-        this.spriteView = spriteView;
         this.res = res;
         this.width = width;
         this.height = height;

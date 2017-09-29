@@ -1,7 +1,6 @@
 package com.pixarninja.sprite_renderer;
 
 import android.graphics.RectF;
-
 import java.util.LinkedHashMap;
 
 public class SpriteCharacter extends SpriteEntity {

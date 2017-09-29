@@ -12,7 +12,6 @@ abstract class SpriteEntity {
     protected int count = 0;
     protected int delta = 1;
     protected Resources res;
-    protected double percentOfScreen;
     protected int xRes;
     protected int yRes;
     protected int width;
@@ -31,7 +30,6 @@ abstract class SpriteEntity {
     protected String direction;
     protected SpriteController controller;
     protected Sprite render;
-    protected SpriteView spriteView;
 
     public Sprite getSprite() { return this.render; }
     public void setSprite(Sprite sprite) { this.render = sprite; }

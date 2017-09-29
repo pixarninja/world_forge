@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class BoxGreen extends SpriteCharacter {
 
-    public BoxGreen(SpriteView spriteView, Resources res, int xRes, int yRes, int width, int height, SpriteController controller, String ID, String transition) {
+    public BoxGreen(Resources res, int xRes, int yRes, int width, int height, SpriteController controller, String ID, String transition) {
 
         if(controller == null) {
             this.controller = new SpriteController();
@@ -20,7 +20,6 @@ public class BoxGreen extends SpriteCharacter {
             this.controller = controller;
         }
         this.controller.setID(ID);
-        this.spriteView = spriteView;
         this.res = res;
         this.xRes = xRes;
         this.yRes = yRes;
@@ -218,7 +217,6 @@ public class BoxGreen extends SpriteCharacter {
         }
         controller.setTransition(transition);
         controller.setEntity(this);
-        controller.setTransition(transition);
         updateBoundingBox();
     }
 

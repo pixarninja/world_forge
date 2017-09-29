@@ -7,14 +7,13 @@ import android.graphics.RectF;
 public class DarkPattern extends SpriteProp{
 
 
-    public DarkPattern(SpriteView spriteView, Resources res, int width, int height, int xRes, int yRes, String ID, String transition) {
+    public DarkPattern(Resources res, int width, int height, int xRes, int yRes, String ID, String transition) {
 
         super();
 
         this.controller = new SpriteController();
 
         this.controller.setID(ID);
-        this.spriteView = spriteView;
         this.res = res;
         this.width = width;
         this.height = height;

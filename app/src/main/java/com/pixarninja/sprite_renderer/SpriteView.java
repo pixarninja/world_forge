@@ -1,10 +1,9 @@
 package com.pixarninja.sprite_renderer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LightingColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
@@ -12,7 +11,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.TextView;
 
 import java.util.ConcurrentModificationException;
 import java.util.LinkedHashMap;
@@ -27,7 +25,6 @@ public class SpriteView extends SurfaceView {
     public volatile float yTouchedPos;
     private SpriteThread spriteThread;
     private Context context;
-
 
     public SpriteView(Context context) {
         super(context);
@@ -191,20 +188,20 @@ public class SpriteView extends SurfaceView {
                                     canvas.drawRect(entryBottom, paint);
                                 }*/
 
-                                /* for debugging flipped spritesheets
+                                /* for debugging flipped spritesheets */
                                 Paint paint;
                                 paint = new Paint();
                                 paint.setStyle(Paint.Style.STROKE);
-                                paint.setColor(Color.rgb(255, 255, 255));
-                                paint.setStrokeWidth(3);
-                                if(entry.getKey().equals("PlayerController")) {
+                                paint.setColor(Color.rgb(0, 0, 0));
+                                paint.setStrokeWidth(5);
+                                if(entry.getKey().equals("BoxController")) {
                                     Matrix matrix = new Matrix();
                                     matrix.postScale(-1, 1);
                                     matrix.postTranslate(entity.getSprite().getSpriteSheet().getWidth(), 0);
                                     canvas.drawBitmap(entity.getSprite().getSpriteSheet(), matrix, null);
 
                                     canvas.drawRect(entity.getSprite().getFrameToDraw(), paint);
-                                }*/
+                                }
 
                                 canvas.drawBitmap(sprite.getSpriteSheet(), sprite.getFrameToDraw(), sprite.getWhereToDraw(), null);
 
@@ -293,7 +290,7 @@ public class SpriteView extends SurfaceView {
             try {
                 /* call the on touch events for all entities */
                 for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
-                    if (entry.getValue().getEntity() != null  && !entry.getValue().getReacting()) {
+                    if (entry.getValue().getEntity() != null) {
                         entry.getValue().getEntity().onTouchEvent(this, entry, controllerMap, poke, move, jump, xTouchedPos, yTouchedPos);
                     }
                 }

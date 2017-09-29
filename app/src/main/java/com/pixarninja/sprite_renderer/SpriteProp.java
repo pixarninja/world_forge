@@ -12,7 +12,7 @@ public class SpriteProp extends SpriteEntity {
     /* for extending the class */
     public SpriteProp() {}
 
-    public SpriteProp(SpriteView spriteView, Resources res, double spriteScale, int width, int height, int xRes, int yRes, int propID,
+    public SpriteProp(Resources res, double spriteScale, int width, int height, int xRes, int yRes, int propID,
                       double xDelta, double yDelta, double xInit, double yInit, int xFrameCount, int yFrameCount, int frameCount,
                       double xDimension, double yDimension,
                       double left, double top, double right, double bottom, String method, String direction, SpriteController controller, String ID, String transition) {
@@ -24,7 +24,6 @@ public class SpriteProp extends SpriteEntity {
             this.controller = controller;
         }
         this.controller.setID(ID);
-        this.spriteView = spriteView;
         this.res = res;
         this.spriteScale = spriteScale;
         this.width = width;
