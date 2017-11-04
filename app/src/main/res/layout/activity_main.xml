@@ -11,35 +11,56 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:weightSum="1"
-    tools:context="com.pixarninja.sprite_renderer.MainActivity">
-
-    <LinearLayout
-        android:id="@+id/topLayout"
-        android:orientation="horizontal"
-        android:layout_height="0dp"
-        android:layout_width="fill_parent"
-        android:layout_weight="0.1" />
+    tools:context="com.pixarninja.world_forge.MainActivity">
 
     <LinearLayout
         android:id="@+id/middleLayout"
         android:orientation="horizontal"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
-        android:layout_weight="0.8" >
+        android:layout_weight="0.75" >
 
-        <com.pixarninja.sprite_renderer.SpriteView
+        <com.pixarninja.world_forge.SpriteView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:id="@+id/spriteView" >
-        </com.pixarninja.sprite_renderer.SpriteView>
+        </com.pixarninja.world_forge.SpriteView>
 
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/bottomLayout"
         android:orientation="horizontal"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
-        android:layout_weight="0.1" />
+        android:background="@drawable/black_square"
+        android:layout_weight="0.175">
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/white" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.075"
+        android:background="@drawable/black_square">
+
+        <Button
+            android:id="@+id/restart"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="16sp"
+            android:text="Restart"
+            android:textColor="@android:color/black"
+            android:onClick="restart" />
+
+    </RelativeLayout>
 
 </LinearLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pixarninja.sprite_renderer">
+    package="com.pixarninja.world_forge">
 
     <application
         android:allowBackup="true"
@@ -8,7 +8,7 @@
         android:label="Sprite Renderer"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.pixarninja.world_forge.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
