@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedHashMap;
 
@@ -24,6 +25,7 @@ public class SpriteView extends SurfaceView {
     public volatile float yTouchedPos;
     private SpriteThread spriteThread;
     private Context context;
+    private ArrayList<Integer> pressedButtons;
 
     public SpriteView(Context context) {
         super(context);
@@ -54,6 +56,9 @@ public class SpriteView extends SurfaceView {
 
     public SpriteThread getSpriteThread() { return this.spriteThread; }
     public void setSpriteThread(SpriteThread spriteThread) { this.spriteThread = spriteThread; }
+
+    public ArrayList<Integer> getPressedButtons() { return this.pressedButtons; }
+    public void setPressedButtons(ArrayList<Integer> pressedButtons) { this.pressedButtons = pressedButtons; }
 
     public int getFrameRate() {
         if(controllerMap != null) {
@@ -290,7 +295,7 @@ public class SpriteView extends SurfaceView {
                 /* call the on touch events for all entities */
                 for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
                     if (entry.getValue().getEntity() != null) {
-                        entry.getValue().getEntity().onTouchEvent(this, entry, controllerMap, poke, move, jump, xTouchedPos, yTouchedPos);
+                        entry.getValue().getEntity().onTouchEvent(pressedButtons, this, entry, controllerMap, poke, move, jump, xTouchedPos, yTouchedPos);
                     }
                 }
             } catch (ConcurrentModificationException e) {

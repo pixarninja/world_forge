@@ -3,6 +3,8 @@ package com.pixarninja.world_forge;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
+
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class SpriteButton extends SpriteEntity {
@@ -138,18 +140,18 @@ public class SpriteButton extends SpriteEntity {
             default:
                 render = new Sprite();
                 refreshEntity("off");
+                transition = "off";
                 controller.setXPos(controller.getXInit() - render.getSpriteWidth() / 2);
                 controller.setYPos(controller.getYInit() - render.getSpriteHeight() / 2);
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
         }
-        controller.setTransition(transition);
+        updateBoundingBox();
         controller.setEntity(this);
         controller.setTransition(transition);
-        updateBoundingBox();
     }
 
     @Override
-    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean poke, boolean move, boolean jump, float xTouchedPos, float yTouchedPos) {
+    public void onTouchEvent(ArrayList<Integer> pressedButtons, SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean poke, boolean move, boolean jump, float xTouchedPos, float yTouchedPos) {
         if(poke) {
             RectF boundingBox = this.render.getBoundingBox();
             if (xTouchedPos >= boundingBox.left && xTouchedPos <= boundingBox.right) {
@@ -159,9 +161,2454 @@ public class SpriteButton extends SpriteEntity {
                     String transition;
                     String ID;
 
+                    switch(entry.getKey()) {
+                        case "FireButtonController":
+                            if(entry.getValue().getTransition().equals("off")) {
+                                entry.getValue().getEntity().refreshEntity("inherit on");
+                                /* calculate what happens */
+                                decide(pressedButtons, 0, controllerMap);
+                                if(pressedButtons == null) {
+                                    pressedButtons = new ArrayList<>();
+                                }
+                                pressedButtons.add(0);
+                            }
+                            break;
+                        case "WaterButtonController":
+                            if(entry.getValue().getTransition().equals("off")) {
+                                entry.getValue().getEntity().refreshEntity("inherit on");
+                                /* calculate what happens */
+                                decide(pressedButtons, 1, controllerMap);
+                                if(pressedButtons == null) {
+                                    pressedButtons = new ArrayList<>();
+                                }
+                                pressedButtons.add(1);
+                            }
+                            break;
+                        case "WoodButtonController":
+                            if(entry.getValue().getTransition().equals("off")) {
+                                entry.getValue().getEntity().refreshEntity("inherit on");
+                                /* calculate what happens */
+                                decide(pressedButtons, 2, controllerMap);
+                                if(pressedButtons == null) {
+                                    pressedButtons = new ArrayList<>();
+                                }
+                                pressedButtons.add(2);
+                            }
+                            break;
+                        case "EarthButtonController":
+                            if(entry.getValue().getTransition().equals("off")) {
+                                entry.getValue().getEntity().refreshEntity("inherit on");
+                                /* calculate what happens */
+                                decide(pressedButtons, 3, controllerMap);
+                                if(pressedButtons == null) {
+                                    pressedButtons = new ArrayList<>();
+                                }
+                                pressedButtons.add(3);
+                            }
+                            break;
+                        case "StoneButtonController":
+                            if(entry.getValue().getTransition().equals("off")) {
+                                entry.getValue().getEntity().refreshEntity("inherit on");
+                                /* calculate what happens */
+                                decide(pressedButtons, 4, controllerMap);
+                                if(pressedButtons == null) {
+                                    pressedButtons = new ArrayList<>();
+                                }
+                                pressedButtons.add(4);
+                            }
+                            break;
+                        default:
+                            ;
+                    }
+
                 }
             }
         }
+
+        spriteView.setPressedButtons(pressedButtons);
+
+    }
+
+     void decide(ArrayList<Integer> pressedButtons, int inputButton, LinkedHashMap<String, SpriteController> controllerMap) {
+
+        /* initial setup */
+        if(pressedButtons == null) {
+
+            switch(inputButton) {
+                case 0:
+                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("star");
+                    break;
+                case 1:
+                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("comet");
+                    break;
+                case 2:
+                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("dust");
+                    break;
+                case 3:
+                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                    break;
+                case 4:
+                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("asteroid");
+                    break;
+            }
+            return;
+
+        }
+        switch(pressedButtons.size()) {
+            case 1:
+                switch(pressedButtons.get(0)) {
+                    case 0: //star
+                        switch(inputButton) {
+                            case 1:
+                            case 2:
+                            case 3:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("exploded star");
+                                break;
+                            case 4:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("magma planet");
+                                break;
+                        }
+                        break;
+                    case 1: //comet
+                        switch(inputButton) {
+                            case 0:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                                break;
+                            case 2:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                break;
+                            case 3:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("ice age");
+                                break;
+                            case 4:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("ocean planet");
+                                break;
+                        }
+                        break;
+                    case 2: //dust
+                        switch(inputButton) {
+                            case 0:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("exploded star");
+                                break;
+                            case 1:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("comet");
+                                break;
+                            case 3:
+                            case 4:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                break;
+                        }
+                        break;
+                    case 3: //earth
+                        switch(inputButton) {
+                            case 0:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("desert");
+                                break;
+                            case 1:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("fertile land");
+                                break;
+                            case 2:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
+                                break;
+                            case 4:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
+                                break;
+                        }
+                        break;
+                    case 4: //asteroid
+                        switch(inputButton) {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("exploded star");
+                                break;
+                        }
+                        break;
+                }
+                break;
+            case 2:
+                switch(pressedButtons.get(0)) {
+                    case 0: //star
+                        switch(pressedButtons.get(1)) {
+                            case 1:
+                            case 2:
+                            case 3: //exploded star
+                                switch(inputButton) {
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                                break;
+                            case 4: //magma planet
+                                switch(inputButton) {
+                                    case 1:
+                                    case 2:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("exploded star");
+                                        break;
+                                    case 3:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("volcanoes");
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 1: //comet
+                        switch(pressedButtons.get(1)) {
+                            case 3: //ice age
+                                switch(inputButton) {
+                                    case 0:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                                        break;
+                                    case 2:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("primitive");
+                                        break;
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                        break;
+                                }
+                                break;
+                            case 0: //earth
+                                switch(inputButton) {
+                                    case 3:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                                        break;
+                                    case 2:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
+                                        break;
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
+                                        break;
+                                }
+                            case 2: //wasteland
+                                switch(inputButton) {
+                                    case 0:
+                                    case 3:
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                                break;
+                            case 4: //ocean planet
+                                switch(inputButton) {
+                                    case 0:
+                                    case 2:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                        break;
+                                    case 3:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 2: //dust
+                        switch(pressedButtons.get(1)) {
+                            case 0: //exploded star
+                                switch(inputButton) {
+                                    case 1:
+                                    case 3:
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                                break;
+                            case 1: //comet
+                                switch(inputButton) {
+                                    case 0:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                                        break;
+                                    case 2:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("primitive");
+                                        break;
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                            case 3:
+                            case 4: //exploded star
+                                switch(inputButton) {
+                                    case 0:
+                                    case 1:
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 3: //earth
+                        switch(pressedButtons.get(1)) {
+                            case 0: //desert
+                                switch(inputButton) {
+                                    case 1:
+                                    case 2:
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                        break;
+                                }
+                                break;
+                            case 1: //fertile land
+                                switch(inputButton) {
+                                    case 2:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("primitive");
+                                        break;
+                                    case 0:
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                        break;
+                                }
+                                break;
+                            case 2: //forest
+                                switch(inputButton) {
+                                    case 0:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                        break;
+                                    case 1:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("fertile land");
+                                        break;
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
+                                        break;
+                                }
+                                break;
+                            case 4: //mountains
+                                switch(inputButton) {
+                                    case 0:
+                                    case 2:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                        break;
+                                    case 1:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 4: //asteroid
+                        switch(pressedButtons.get(1)) {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3: //exploded star
+                                switch(inputButton) {
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                }
+                break;
+            case 3:
+                switch(pressedButtons.get(0)) {
+                    case 0: //star
+                        switch(pressedButtons.get(1)) {
+                            case 1:
+                            case 2: //exploded star
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                                break;
+                            case 4: //magma planet
+                                switch(pressedButtons.get(2)) {
+                                    case 1:
+                                    case 2: //exploded star
+                                        switch(inputButton) {
+                                            case 1:
+                                            case 2:
+                                            case 3:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                                break;
+                                        }
+                                        break;
+                                    case 3: //volcanoes
+                                        switch(inputButton) {
+                                            case 1:
+                                            case 2:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 1: //comet
+                        switch(pressedButtons.get(1)) {
+                            case 0: //earth
+                                switch(pressedButtons.get(2)) {
+                                    case 3: //earth
+                                        switch(inputButton) {
+                                            case 2:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
+                                                break;
+                                            case 4:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
+                                                break;
+                                        }
+                                        break;
+                                    case 2: //forest
+                                        switch(inputButton) {
+                                            case 3:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                                break;
+                                            case 4:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
+                                                break;
+                                        }
+                                    case 4: //mountains
+                                        switch(inputButton) {
+                                            case 3:
+                                            case 2:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 2: //wasteland
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                break;
+                            case 3: //ice age
+                                switch(pressedButtons.get(2)) {
+                                    case 0: //earth
+                                        switch(inputButton) {
+                                            case 2:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
+                                                break;
+                                            case 4:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
+                                                break;
+                                        }
+                                    case 2: //primitive
+                                        switch(inputButton) {
+                                            case 0:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("huts");
+                                                break;
+                                            case 4:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                                break;
+                                        }
+                                        break;
+                                    case 4: //wasteland
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                                break;
+                            case 4: //ocean planet
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                    case 2: //wasteland
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("balck hole");
+                                        break;
+                                    case 3: //fertile land
+                                        switch(inputButton) {
+                                            case 2:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("primitive");
+                                                break;
+                                            case 0:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 2: //dust
+                        switch(pressedButtons.get(1)) {
+                            case 0: //exploded star
+                            case 3:
+                            case 4: //black hole
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                break;
+                            case 1: //comet
+                                switch(pressedButtons.get(2)) {
+                                    case 3: //ice age
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("ice age");
+                                        break;
+                                    case 0: //earth
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                                        break;
+                                    case 2: //wasteland
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                        break;
+                                    case 4: //ocean planet
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("ocean planet");
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 3: //earth
+                        switch(pressedButtons.get(1)) {
+                            case 0: //desert
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                break;
+                            case 1: //fertile land
+                                switch(pressedButtons.get(2)) {
+                                    case 2: //primitive
+                                        switch(inputButton) {
+                                            case 0:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("huts");
+                                                break;
+                                            case 4: //wasteland
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                                break;
+                                        }
+                                        break;
+                                    case 0:
+                                    case 4: //wasteland
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                }
+                                break;
+                            case 2: //forest
+                                switch(pressedButtons.get(2)) {
+                                    case 0: //wasteland
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                    case 1: //fertile land
+                                        switch(inputButton) {
+                                            case 0:
+                                            case 4:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                                break;
+                                        }
+                                        break;
+                                    case 4: //mountains
+                                        switch(inputButton) {
+                                            case 0:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
+                                                break;
+                                            case 1:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 4: //mountains
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                    case 2: //wasteland
+                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                        break;
+                                    case 1: //earth
+                                        switch(inputButton) {
+                                            case 0:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("desert");
+                                                break;
+                                            case 2:
+                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 4: //asteroid
+                        switch(inputButton) {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3: //exploded star
+                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
+                                break;
+                        }
+                        break;
+                }
+                break;
+            case 4:
+                switch(pressedButtons.get(0)) {
+                    case 0:
+                        switch(pressedButtons.get(1)) {
+                            case 0:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 1:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 2:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 3:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 4:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 1:
+                        switch(pressedButtons.get(1)) {
+                            case 0:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 1:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 2:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 3:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 4:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch(pressedButtons.get(1)) {
+                            case 0:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 1:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 2:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 3:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 4:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 3:
+                        switch(pressedButtons.get(1)) {
+                            case 0:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 1:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 2:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 3:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 4:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    case 4:
+                        switch(pressedButtons.get(1)) {
+                            case 0:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 1:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 2:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 3:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 4:
+                                switch(pressedButtons.get(2)) {
+                                    case 0:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 1:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 3:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                    case 4:
+                                        switch(pressedButtons.get(3)) {
+                                            case 0:
+                                                break;
+                                            case 1:
+                                                break;
+                                            case 2:
+                                                break;
+                                            case 3:
+                                                break;
+                                            case 4:
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                }
+                break;
+        }
+
     }
 
 }
