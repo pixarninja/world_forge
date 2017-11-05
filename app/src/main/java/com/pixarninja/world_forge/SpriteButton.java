@@ -1,5 +1,6 @@
 package com.pixarninja.world_forge;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -151,7 +152,10 @@ public class SpriteButton extends SpriteEntity {
     }
 
     @Override
-    public void onTouchEvent(ArrayList<Integer> pressedButtons, SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean poke, boolean move, boolean jump, float xTouchedPos, float yTouchedPos) {
+    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean poke, boolean move, boolean jump, float xTouchedPos, float yTouchedPos) {
+
+        String state = spriteView.getState();
+
         if(poke) {
             RectF boundingBox = this.render.getBoundingBox();
             if (xTouchedPos >= boundingBox.left && xTouchedPos <= boundingBox.right) {
@@ -163,55 +167,35 @@ public class SpriteButton extends SpriteEntity {
                             if(entry.getValue().getTransition().equals("off")) {
                                 entry.getValue().getEntity().refreshEntity("inherit on");
                                 /* calculate what happens */
-                                decide(pressedButtons, 0, controllerMap);
-                                if(pressedButtons == null) {
-                                    pressedButtons = new ArrayList<>();
-                                }
-                                pressedButtons.add(0);
+                                spriteView = decide(spriteView, 0, controllerMap);
                             }
                             break;
                         case "WaterButtonController":
                             if(entry.getValue().getTransition().equals("off")) {
                                 entry.getValue().getEntity().refreshEntity("inherit on");
                                 /* calculate what happens */
-                                decide(pressedButtons, 1, controllerMap);
-                                if(pressedButtons == null) {
-                                    pressedButtons = new ArrayList<>();
-                                }
-                                pressedButtons.add(1);
+                                spriteView = decide(spriteView, 1, controllerMap);
                             }
                             break;
                         case "WoodButtonController":
                             if(entry.getValue().getTransition().equals("off")) {
                                 entry.getValue().getEntity().refreshEntity("inherit on");
                                 /* calculate what happens */
-                                decide(pressedButtons, 2, controllerMap);
-                                if(pressedButtons == null) {
-                                    pressedButtons = new ArrayList<>();
-                                }
-                                pressedButtons.add(2);
+                                spriteView = decide(spriteView, 2, controllerMap);
                             }
                             break;
                         case "EarthButtonController":
                             if(entry.getValue().getTransition().equals("off")) {
                                 entry.getValue().getEntity().refreshEntity("inherit on");
                                 /* calculate what happens */
-                                decide(pressedButtons, 3, controllerMap);
-                                if(pressedButtons == null) {
-                                    pressedButtons = new ArrayList<>();
-                                }
-                                pressedButtons.add(3);
+                                spriteView = decide(spriteView, 3, controllerMap);
                             }
                             break;
                         case "StoneButtonController":
                             if(entry.getValue().getTransition().equals("off")) {
                                 entry.getValue().getEntity().refreshEntity("inherit on");
                                 /* calculate what happens */
-                                decide(pressedButtons, 4, controllerMap);
-                                if(pressedButtons == null) {
-                                    pressedButtons = new ArrayList<>();
-                                }
-                                pressedButtons.add(4);
+                                spriteView = decide(spriteView, 4, controllerMap);
                             }
                             break;
                         default:
@@ -222,765 +206,347 @@ public class SpriteButton extends SpriteEntity {
             }
         }
 
-        spriteView.setPressedButtons(pressedButtons);
-
     }
 
-     void decide(ArrayList<Integer> pressedButtons, int inputButton, LinkedHashMap<String, SpriteController> controllerMap) {
+     SpriteView decide(SpriteView spriteView, int inputButton, LinkedHashMap<String, SpriteController> controllerMap) {
 
-        /* initial setup */
-        if(pressedButtons == null) {
+         String state = spriteView.getState();
+         int percentage = spriteView.getPercentage();
+         String description = spriteView.getDescription();
 
-            switch(inputButton) {
-                case 0:
-                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("star");
-                    break;
-                case 1:
-                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("comet");
-                    break;
-                case 2:
-                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("dust");
-                    break;
-                case 3:
-                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                    break;
-                case 4:
-                    controllerMap.get("WorldForgeController").getEntity().refreshEntity("asteroid");
-                    break;
-            }
-            return;
+         /* initial setup */
+         if(state == null) {
 
-        }
-        switch(pressedButtons.size()) {
-            case 1:
-                switch(pressedButtons.get(0)) {
-                    case 0: //star
-                        switch(inputButton) {
-                            case 1:
-                            case 2:
-                            case 3:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("exploded star");
-                                break;
-                            case 4:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("magma planet");
-                                break;
-                        }
+             switch(inputButton) {
+                 case 0:
+                     state = "star";
+                     percentage = 0;
+                     description = "A vibrant star has been born! It's heat radiates out into the cosmos...";
+                     break;
+                 case 1:
+                     state = "comet";
+                     percentage = 0;
+                     description = "A frozen comet has formed! It drifts through space, lifeless and cold...";
+                     break;
+                 case 2:
+                     state = "dust";
+                     percentage = 0;
+                     description = "A cloud of space particles has collected! It eerily swirls on its own...";
+                     break;
+                 case 3:
+                     state = "earth";
+                     percentage = 10;
+                     description = "A planet of lively soil has formed! Small organisms squirm in the ground...";
+                     break;
+                 case 4:
+                     state = "asteroid";
+                     percentage = 0;
+                     description = "An asteroid has formed! It's rocky surface is void of atmosphere...";
+                     break;
+             }
+
+             controllerMap.get("WorldForgeController").getEntity().refreshEntity(state);
+
+             spriteView.setState(state);
+             spriteView.setPercentage(percentage);
+             spriteView.setDescription(description);
+
+             return spriteView;
+
+         }
+
+         switch(state) {
+             case "star":
+                 switch(inputButton) {
+                     case 1:
+                     case 2:
+                     case 3:
+                         state = "exploded star";
+                         break;
+                     case 4:
+                         state = "magma planet";
+                         break;
+                 }
+                 break;
+             case "comet":
+                 switch(inputButton) {
+                     case 0:
+                         state = "earth";
+                         break;
+                     case 2:
+                         state = "wasteland";
+                         break;
+                     case 3:
+                         state = "ice age";
+                         break;
+                     case 4:
+                         state = "ocean planet";
+                         break;
+                 }
+                 break;
+             case "dust":
+                 switch(inputButton) {
+                     case 0:
+                         state = "exploded star";
+                         break;
+                     case 1:
+                         state = "comet";
+                         break;
+                     case 3:
+                     case 4:
+                         state = "asteroid";
+                         break;
+                 }
+                 break;
+             case "earth":
+                 switch(inputButton) {
+                     case 0:
+                         state = "desert";
+                         break;
+                     case 1:
+                         state = "fertile land";
+                         break;
+                     case 2:
+                         state = "forest";
+                         break;
+                     case 4:
+                         state = "mountains";
+                         break;
+                 }
+                 break;
+             case "asteroid":
+                 switch(inputButton) {
+                     case 0:
+                         state = "desert";
+                         break;
+                     case 2:
+                         state = "dust";
+                         break;
+                     case 1:
+                     case 3:
+                         state = "earth";
+                         break;
+                 }
+                 break;
+             case "mountains":
+                 switch(inputButton) {
+                     case 0:
+                     case 2:
+                         state = "wasteland";
+                         break;
+                     case 1:
+                     case 3:
+                         state = "earth";
+                         break;
+                 }
+                 break;
+             case "fertile land":
+                 switch(inputButton) {
+                     case 0:
+                         state = "desert";
+                         break;
+                     case 2:
+                         state = "primitive";
+                         break;
+                     case 1:
+                     case 3:
+                         state = "wasteland";
+                         break;
+                     case 4:
+                         state = "mountains";
+                         break;
+                 }
+                 break;
+             case "forest":
+                 switch(inputButton) {
+                     case 0:
+                         state = "desert";
+                         break;
+                     case 1:
+                     case 3:
+                         state = "fertile land";
+                         break;
+                     case 4:
+                         state = "mountains";
+                         break;
+                 }
+                 break;
+             case "ocean planet":
+                 switch(inputButton) {
+                     case 1:
+                         state = "fertile land";
+                         break;
+                     case 0:
+                     case 2:
+                         state = "wasteland";
+                         break;
+                     case 3:
+                         state = "earth";
+                         break;
+                 }
+                 break;
+             case "wasteland":
+                 state = "exploded star";
+                 break;
+             case "exploded star":
+                 state = "black hole";
+                 break;
+             case "magma planet":
+                 switch(inputButton) {
+                     case 1:
+                     case 2:
+                         state = "exploded star";
+                         break;
+                     case 3:
+                         state = "volcanoes";
+                         break;
+                 }
+                 break;
+             case "black hole":
+                 break;
+             case "desert":
+                 switch(inputButton) {
+                     case 0:
+                     case 1:
+                     case 2:
+                     case 3:
+                     case 4:
+                         state = "wasteland";
+                         break;
+                 }
+                 break;
+             case "volcanoes":
+                 switch(inputButton) {
+                     case 0:
+                     case 1:
+                     case 2:
+                     case 3:
+                     case 4:
+                         state = "wasteland";
+                         break;
+                 }
+                 break;
+             case "ice age":
+                 switch(inputButton) {
+                     case 0:
+                         state = "earth";
+                         break;
+                     case 2:
+                         state = "primitive";
+                         break;
+                     case 4:
+                         state = "mountains";
+                         break;
+                 }
+                 break;
+             case "primitive":
+                 switch(inputButton) {
+                     case 0:
+                         state = "houses";
+                         break;
+                     case 4:
+                         state = "desert";
+                         break;
+                 }
+                 break;
+             case "houses":
+                 switch(inputButton) {
+                     case 4:
+                        state = "castles";
                         break;
-                    case 1: //comet
-                        switch(inputButton) {
-                            case 0:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                                break;
-                            case 2:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                break;
-                            case 3:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("ice age");
-                                break;
-                            case 4:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("ocean planet");
-                                break;
-                        }
-                        break;
-                    case 2: //dust
-                        switch(inputButton) {
-                            case 0:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("exploded star");
-                                break;
-                            case 1:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("comet");
-                                break;
-                            case 3:
-                            case 4:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                        }
-                        break;
-                    case 3: //earth
-                        switch(inputButton) {
-                            case 0:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("desert");
-                                break;
-                            case 1:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("fertile land");
-                                break;
-                            case 2:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
-                                break;
-                            case 4:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                break;
-                        }
-                        break;
-                    case 4: //asteroid
-                        switch(inputButton) {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("exploded star");
-                                break;
-                        }
-                        break;
-                }
-                break;
-            case 2:
-                switch(pressedButtons.get(0)) {
-                    case 0: //star
-                        switch(pressedButtons.get(1)) {
-                            case 1:
-                            case 2:
-                            case 3: //exploded star
-                                switch(inputButton) {
-                                    case 2:
-                                    case 3:
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                            case 4: //magma planet
-                                switch(inputButton) {
-                                    case 1:
-                                    case 2:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("exploded star");
-                                        break;
-                                    case 3:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("volcanoes");
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 1: //comet
-                        switch(pressedButtons.get(1)) {
-                            case 3: //ice age
-                                switch(inputButton) {
-                                    case 0:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                                        break;
-                                    case 2:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("primitive");
-                                        break;
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                        break;
-                                }
-                                break;
-                            case 0: //earth
-                                switch(inputButton) {
-                                    case 3:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                                        break;
-                                    case 2:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
-                                        break;
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                        break;
-                                }
-                            case 2: //wasteland
-                                switch(inputButton) {
-                                    case 0:
-                                    case 3:
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                            case 4: //ocean planet
-                                switch(inputButton) {
-                                    case 0:
-                                    case 2:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                        break;
-                                    case 3:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 2: //dust
-                        switch(pressedButtons.get(1)) {
-                            case 0: //exploded star
-                                switch(inputButton) {
-                                    case 1:
-                                    case 3:
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                            case 1: //comet
-                                switch(inputButton) {
-                                    case 0:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                                        break;
-                                    case 2:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("primitive");
-                                        break;
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                            case 3:
-                            case 4: //exploded star
-                                switch(inputButton) {
-                                    case 0:
-                                    case 1:
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 3: //earth
-                        switch(pressedButtons.get(1)) {
-                            case 0: //desert
-                                switch(inputButton) {
-                                    case 1:
-                                    case 2:
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                        break;
-                                }
-                                break;
-                            case 1: //fertile land
-                                switch(inputButton) {
-                                    case 2:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("primitive");
-                                        break;
-                                    case 0:
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                        break;
-                                }
-                                break;
-                            case 2: //forest
-                                switch(inputButton) {
-                                    case 0:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                        break;
-                                    case 1:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("fertile land");
-                                        break;
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                        break;
-                                }
-                                break;
-                            case 4: //mountains
-                                switch(inputButton) {
-                                    case 0:
-                                    case 2:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                        break;
-                                    case 1:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 4: //asteroid
-                        switch(pressedButtons.get(1)) {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3: //exploded star
-                                switch(inputButton) {
-                                    case 0:
-                                    case 1:
-                                    case 2:
-                                    case 3:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                }
-                break;
-            case 3:
-                switch(pressedButtons.get(0)) {
-                    case 0: //star
-                        switch(pressedButtons.get(1)) {
-                            case 1:
-                            case 2: //exploded star
-                                switch(pressedButtons.get(2)) {
-                                    case 0:
-                                    case 1:
-                                    case 2:
-                                    case 3:
-                                    case 4:
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                            case 4: //magma planet
-                                switch(pressedButtons.get(2)) {
-                                    case 1:
-                                    case 2: //exploded star
-                                        switch(inputButton) {
-                                            case 1:
-                                            case 2:
-                                            case 3:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                        }
-                                        break;
-                                    case 3: //volcanoes
-                                        switch(inputButton) {
-                                            case 1:
-                                            case 2:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 1: //comet
-                        switch(pressedButtons.get(1)) {
-                            case 0: //earth
-                                switch(pressedButtons.get(2)) {
-                                    case 3: //earth
-                                        switch(inputButton) {
-                                            case 2:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
-                                                break;
-                                            case 4:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                                break;
-                                        }
-                                        break;
-                                    case 2: //forest
-                                        switch(inputButton) {
-                                            case 3:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                            case 4:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                                break;
-                                        }
-                                    case 4: //mountains
-                                        switch(inputButton) {
-                                            case 3:
-                                            case 2:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                            case 2: //wasteland
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                            case 3: //ice age
-                                switch(pressedButtons.get(2)) {
-                                    case 0: //earth
-                                        switch(inputButton) {
-                                            case 2:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
-                                                break;
-                                            case 4:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                                break;
-                                        }
-                                    case 2: //primitive
-                                        switch(inputButton) {
-                                            case 0:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("houses");
-                                                break;
-                                            case 4:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                    case 4: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                            case 4: //ocean planet
-                                switch(pressedButtons.get(2)) {
-                                    case 0:
-                                    case 2: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("balck hole");
-                                        break;
-                                    case 3: //fertile land
-                                        switch(inputButton) {
-                                            case 2:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("primitive");
-                                                break;
-                                            case 0:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 2: //dust
-                        switch(pressedButtons.get(1)) {
-                            case 0: //exploded star
-                            case 3:
-                            case 4: //black hole
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                            case 1: //comet
-                                switch(pressedButtons.get(2)) {
-                                    case 3: //ice age
-                                        switch(inputButton) {
-                                            case 0:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                                                break;
-                                            case 4:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                    case 0: //earth
-                                        switch(inputButton) {
-                                            case 3:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
-                                                break;
-                                            case 4:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                                break;
-                                        }
-                                        break;
-                                    case 4: //ocean planet
-                                        switch(inputButton) {
-                                            case 0:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                            case 3:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("fertile land");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 3: //earth
-                        switch(pressedButtons.get(1)) {
-                            case 0: //desert
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                break;
-                            case 1: //fertile land
-                                switch(pressedButtons.get(2)) {
-                                    case 2: //primitive
-                                        switch(inputButton) {
-                                            case 0:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("houses");
-                                                break;
-                                            case 4: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                    case 0:
-                                    case 4: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                            case 2: //forest
-                                switch(pressedButtons.get(2)) {
-                                    case 0: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                    case 1: //fertile land
-                                        switch(inputButton) {
-                                            case 0:
-                                            case 4:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                    case 4: //mountains
-                                        switch(inputButton) {
-                                            case 0:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                            case 1:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("earth");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                            case 4: //mountains
-                                switch(pressedButtons.get(2)) {
-                                    case 0:
-                                    case 2: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                    case 1: //earth
-                                        switch(inputButton) {
-                                            case 0:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("desert");
-                                                break;
-                                            case 2:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("forest");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 4: //asteroid
-                        switch(inputButton) {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3: //exploded star
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                        }
-                        break;
-                }
-                break;
-            case 4:
-                switch(pressedButtons.get(0)) {
-                    case 0: //star
-                        switch(pressedButtons.get(1)) {
-                            case 1:
-                            case 2:
-                            case 3: //exploded star
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                            case 4: //magma planet
-                                switch(pressedButtons.get(2)) {
-                                    case 1:
-                                    case 2: //exploded star
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                    case 3: //volcanoes
-                                        switch(pressedButtons.get(3)) {
-                                            case 2:
-                                            case 1:
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 1: //comet
-                        switch(pressedButtons.get(1)) {
-                            case 0: //earth
-                                switch(pressedButtons.get(2)) {
-                                    case 3: //earth
-                                        switch(pressedButtons.get(3)) {
-                                            case 2: //forest
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                                break;
-                                            case 4: //mountains
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                    case 2: //forest
-                                        switch(pressedButtons.get(3)) {
-                                            case 3: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                            case 4: //mountains
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                    case 4: //mountains
-                                        switch(pressedButtons.get(3)) {
-                                            case 3:
-                                            case 2: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                            case 2: //wasteland
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                            case 3: //ice age
-                                switch(pressedButtons.get(2)) {
-                                    case 0: //earth
-                                        switch(pressedButtons.get(3)) {
-                                            case 2: //forest
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                                break;
-                                            case 4: //mountains
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                    case 2: //primitive
-                                        switch(pressedButtons.get(3)) {
-                                            case 0: //houses
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("castles");
-                                                break;
-                                            case 4: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                        }
-                                        break;
-                                    case 4: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                            case 4: //ocean planet
-                                switch(pressedButtons.get(2)) {
-                                    case 0:
-                                    case 2: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("balck hole");
-                                        break;
-                                    case 3: //fertile land
-                                        switch(pressedButtons.get(3)) {
-                                            case 2: //primitive
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("houses");
-                                                break;
-                                            case 0: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 2: //dust
-                        switch(pressedButtons.get(1)) {
-                            case 0: //exploded star
-                            case 3:
-                            case 4: //black hole
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                            case 1: //comet
-                                switch(pressedButtons.get(2)) {
-                                    case 3: //ice age
-                                        switch(pressedButtons.get(3)) {
-                                            case 0: //earth
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                                break;
-                                            case 4: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                        }
-                                        break;
-                                    case 0: //earth
-                                        switch(pressedButtons.get(3)) {
-                                            case 3: //forest
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("mountains");
-                                                break;
-                                            case 4: //mountains
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                    case 4: //ocean planet
-                                        switch(pressedButtons.get(3)) {
-                                            case 0: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                            case 3: //fertile land
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 3: //earth
-                        switch(pressedButtons.get(1)) {
-                            case 0: //wasteland
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                            case 1: //fertile land
-                                switch(pressedButtons.get(2)) {
-                                    case 2: //primitive
-                                        switch(pressedButtons.get(3)) {
-                                            case 0: //houses
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("castles");
-                                                break;
-                                            case 4: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                        }
-                                        break;
-                                    case 0:
-                                    case 4: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                }
-                                break;
-                            case 2: //forest
-                                switch(pressedButtons.get(2)) {
-                                    case 0: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                    case 1: //fertile land
-                                        switch(pressedButtons.get(3)) {
-                                            case 0:
-                                            case 4: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                        }
-                                        break;
-                                    case 4: //mountains
-                                        switch(pressedButtons.get(3)) {
-                                            case 0: //wasteland
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                                break;
-                                            case 1: //earth
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("desert");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                            case 4: //mountains
-                                switch(pressedButtons.get(2)) {
-                                    case 0:
-                                    case 2: //wasteland
-                                        controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                        break;
-                                    case 1: //earth
-                                        switch(pressedButtons.get(3)) {
-                                            case 0: //desert
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("wasteland");
-                                                break;
-                                            case 2: //forest
-                                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("desert");
-                                                break;
-                                        }
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                    case 4: //asteroid
-                        switch(inputButton) {
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3: //exploded star
-                                controllerMap.get("WorldForgeController").getEntity().refreshEntity("black hole");
-                                break;
-                        }
-                        break;
-                }
-                break;
-        }
+                 }
+                 break;
+             case "castles":
+                 break;
+         }
+
+         /* decide the percentage and description */
+         switch(state) {
+             case "star":
+                 percentage = 0;
+                 description = "A vibrant star has been born! It's heat radiates out into the cosmos...";
+                 break;
+             case "comet":
+                 percentage = 5;
+                 description = "A frozen comet has formed! It drifts through space, lonely and cold...";
+                 break;
+             case "dust":
+                 percentage = 0;
+                 description = "A cloud of space particles has collected! It eerily swirls on its own...";
+                 break;
+             case "earth":
+                 percentage = 10;
+                 description = "A planet of lively soil has formed! Small organisms squirm in the ground...";
+                 break;
+             case "asteroid":
+                 percentage = 0;
+                 description = "An asteroid has formed! It's rocky surface is void of atmosphere...";
+                 break;
+             case "magma planet":
+                 percentage = 0;
+                 description = "A planet of bubbling magma has formed! The atmosphere is hot and devoid of water...";
+                 break;
+             case "exploded star":
+                 percentage = 0;
+                 description = "The remains of a catastrophic explosion lie before you! What was once there is never to exist again...";
+                 break;
+             case "volcanoes":
+                 percentage = 0;
+                 description = "The peaks of erupting volcanoes crowd the horizon! The atmosphere is plagued with fire and brimstone...";
+                 break;
+             case "wasteland":
+                 percentage = 1;
+                 description = "A tortured landscape looms before you. The desolate atmosphere reaks of decay...";
+                 break;
+             case "ice age":
+                 percentage = 10;
+                 description = "Oceans hug the planet's surface. The world is shrouded in cold, and primitive organisms have developed...";
+                 break;
+             case "ocean planet":
+                 percentage = 10;
+                 description = "A planet of infinite water has formed! Ocean creatures swim in the vast depths...";
+                 break;
+             case "desert":
+                 percentage = 5;
+                 description = "The dunes of a windy desert make waves in the landscape. The land is scorched and arid...";
+                 break;
+             case "fertile land":
+                 percentage = 40;
+                 description = "The land is rich with vegetation and life. Primitive humans and other creatures coexist in abundance,...";
+                 break;
+             case "forest":
+                 percentage = 30;
+                 description = "The planet is covered with a forest of trees! The atmosphere improves, and thick trees sprout amongst the plants and animals...";
+                 break;
+             case "primitive":
+                 percentage = 60;
+                 description = "Humans have conquered the planet! They form nomadic societies, thriving off the animals and vegetation...";
+                 break;
+             case "mountains":
+                 percentage = 20;
+                 description = "The planet has high mountain peaks and low valleys. Food sources have depleted, replaced by rocky cliffs...";
+                 break;
+             case "houses":
+                 percentage = 80;
+                 description = "Humans have formed primitive cities! They build sturdy structures and live peacefully together...";
+                 break;
+             case "castles":
+                 percentage = 100;
+                 description = "Humanity develops complex civilizations! They build tall castles and walls around their cities. The world is completely populated. Congratulations, Mighty Creator!";
+                 break;
+             case "black hole":
+                 percentage = 0;
+                 description = "A dense hole has ripped the fabric of space and time! Nothing can be done, it absorbs all matter in the blink of an eye...";
+                 break;
+         }
+
+         controllerMap.get("WorldForgeController").getEntity().refreshEntity(state);
+
+         spriteView.setState(state);
+         spriteView.setPercentage(percentage);
+         spriteView.setDescription(description);
+
+         return spriteView;
 
     }
 

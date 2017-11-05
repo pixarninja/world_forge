@@ -11,19 +11,59 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:weightSum="1"
+    android:background="@drawable/empty"
     tools:context="com.pixarninja.world_forge.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:orientation="horizontal"
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:gravity="left"
+        android:background="@drawable/colored_strip"
+        android:layout_weight="0.1">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/restart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:text="Restart"
+                android:textColor="@android:color/black"
+                android:onClick="restart" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/score"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="30sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/middleLayout"
         android:orientation="horizontal"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
-        android:layout_weight="0.75" >
+        android:layout_weight="0.65">
 
         <com.pixarninja.world_forge.SpriteView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:id="@+id/spriteView" >
+            android:id="@+id/spriteView">
         </com.pixarninja.world_forge.SpriteView>
 
     </LinearLayout>
@@ -44,7 +84,7 @@
             android:id="@+id/output"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textColor="@android:color/white" />
 
     </FrameLayout>

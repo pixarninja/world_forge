@@ -19,9 +19,9 @@ public class WorldForge extends SpriteEntity {
         this.controller.setXDelta(0);
         this.controller.setYDelta(0);
         this.controller.setXInit(width / 2);
-        this.controller.setYInit(height / 2);
+        this.controller.setYInit(height * 0.4);
         this.controller.setXPos(width / 2);
-        this.controller.setYPos(height / 2);
+        this.controller.setYPos(height * 0.4);
         this.xFrameCount = 1;
         this.yFrameCount = 1;
         this.frameCount = 1;
@@ -185,7 +185,7 @@ public class WorldForge extends SpriteEntity {
                 render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
                 render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
                 break;
-            case "ruins":
+            case "mountains":
                 render = new Sprite();
                 render.setTransition(transition);
                 render.setXDimension(xDimension);
@@ -201,7 +201,7 @@ public class WorldForge extends SpriteEntity {
                 render.setDirection(direction);
                 xSpriteRes = xRes * render.getXFrameCount();
                 ySpriteRes = yRes * render.getYFrameCount();
-                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.ruins, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
+                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.mountains, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
                 render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
                 render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
                 render.setFrameScale((width * spriteScale) / (double)render.getFrameWidth()); // scale = goal width / original width

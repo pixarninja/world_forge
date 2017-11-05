@@ -17,7 +17,7 @@ public class SpriteCharacter extends SpriteEntity {
     public void setDelta(int delta) { this.delta = delta; }
 
     @Override
-    public void onTouchEvent(ArrayList<Integer> pressedButtons, SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean poke, boolean move, boolean jump, float xTouchedPos, float yTouchedPos) {
+    public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean poke, boolean move, boolean jump, float xTouchedPos, float yTouchedPos) {
         if(poke && !controller.getReacting()) {
             RectF boundingBox = render.getBoundingBox();
             if (xTouchedPos >= boundingBox.left && xTouchedPos <= boundingBox.right) {

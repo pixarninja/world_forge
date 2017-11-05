@@ -1,5 +1,6 @@
 package com.pixarninja.world_forge;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -25,7 +27,9 @@ public class SpriteView extends SurfaceView {
     public volatile float yTouchedPos;
     private SpriteThread spriteThread;
     private Context context;
-    private ArrayList<Integer> pressedButtons;
+    private String state;
+    private int percentage = 0;
+    private String description = "";
 
     public SpriteView(Context context) {
         super(context);
@@ -57,8 +61,14 @@ public class SpriteView extends SurfaceView {
     public SpriteThread getSpriteThread() { return this.spriteThread; }
     public void setSpriteThread(SpriteThread spriteThread) { this.spriteThread = spriteThread; }
 
-    public ArrayList<Integer> getPressedButtons() { return this.pressedButtons; }
-    public void setPressedButtons(ArrayList<Integer> pressedButtons) { this.pressedButtons = pressedButtons; }
+    public String getState() { return this.state; }
+    public void setState(String state) { this.state = state; }
+
+    public int getPercentage() { return this.percentage; }
+    public void setPercentage(int percentage) { this.percentage = percentage; }
+
+    public String getDescription() { return this.description; }
+    public void setDescription(String description) { this.description = description; }
 
     public int getFrameRate() {
         if(controllerMap != null) {
@@ -295,9 +305,32 @@ public class SpriteView extends SurfaceView {
                 /* call the on touch events for all entities */
                 for (LinkedHashMap.Entry<String, SpriteController> entry : controllerMap.entrySet()) {
                     if (entry.getValue().getEntity() != null) {
-                        entry.getValue().getEntity().onTouchEvent(pressedButtons, this, entry, controllerMap, poke, move, jump, xTouchedPos, yTouchedPos);
+                        entry.getValue().getEntity().onTouchEvent(this, entry, controllerMap, poke, move, jump, xTouchedPos, yTouchedPos);
                     }
                 }
+
+                Activity activity = (Activity) context;;
+
+                /* update output description */
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView output = (TextView) ((Activity) context).findViewById(R.id.output);
+                        String newText = description;
+                        output.setText(newText);
+                    }
+                });
+
+                /* update score */
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView score = (TextView) ((Activity) context).findViewById(R.id.score);
+                        String newText = "Population: " + percentage + "%";
+                        score.setText(newText);
+                    }
+                });
+
             } catch (ConcurrentModificationException e) {
                 ;
             }
