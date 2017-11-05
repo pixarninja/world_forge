@@ -132,6 +132,10 @@ abstract class SpriteEntity {
 
             controller.setLastFrameChangeTime(time);
 
+            if(render == null) {
+                return;
+            }
+
             if(render.getDirection().equals("backwards")) {
                 if(count == 0) {
                     delta = -1;

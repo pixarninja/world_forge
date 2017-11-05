@@ -154,8 +154,6 @@ public class SpriteButton extends SpriteEntity {
     @Override
     public void onTouchEvent(SpriteView spriteView, LinkedHashMap.Entry<String, SpriteController> entry, LinkedHashMap<String, SpriteController> controllerMap, boolean poke, boolean move, boolean jump, float xTouchedPos, float yTouchedPos) {
 
-        String state = spriteView.getState();
-
         if(poke) {
             RectF boundingBox = this.render.getBoundingBox();
             if (xTouchedPos >= boundingBox.left && xTouchedPos <= boundingBox.right) {
@@ -196,6 +194,13 @@ public class SpriteButton extends SpriteEntity {
                                 entry.getValue().getEntity().refreshEntity("inherit on");
                                 /* calculate what happens */
                                 spriteView = decide(spriteView, 4, controllerMap);
+                            }
+                            break;
+                        case "ElectricityButtonController":
+                            if(entry.getValue().getTransition().equals("off")) {
+                                entry.getValue().getEntity().refreshEntity("inherit on");
+                                /* calculate what happens */
+                                spriteView = decide(spriteView, 5, controllerMap);
                             }
                             break;
                         default:
@@ -243,6 +248,11 @@ public class SpriteButton extends SpriteEntity {
                      percentage = 0;
                      description = "An asteroid has formed! It's rocky surface is void of atmosphere...";
                      break;
+                 case 5:
+                     state = "plasma";
+                     percentage = 0;
+                     description = "A ball of plasma has appeared! It pops and fizzles in the emptiness of space...";
+                     break;
              }
 
              controllerMap.get("WorldForgeController").getEntity().refreshEntity(state);
@@ -256,11 +266,44 @@ public class SpriteButton extends SpriteEntity {
          }
 
          switch(state) {
+             case "plasma":
+                 switch(inputButton) {
+                     case 0:
+                         state = "star";
+                         break;
+                     case 1:
+                     case 2:
+                         state = "exploded star";
+                         break;
+                     case 3:
+                     case 4:
+                         state = "stormy planet";
+                         break;
+                 }
+                 break;
+             case "stormy planet":
+                 switch(inputButton) {
+                     case 0:
+                         state = "magma planet";
+                         break;
+                     case 1:
+                     case 2:
+                         state = "wasteland";
+                         break;
+                     case 3:
+                         state = "earth";
+                         break;
+                     case 4:
+                         state = "asteroid";
+                         break;
+                 }
+                 break;
              case "star":
                  switch(inputButton) {
                      case 1:
                      case 2:
                      case 3:
+                     case 5:
                          state = "exploded star";
                          break;
                      case 4:
@@ -274,6 +317,7 @@ public class SpriteButton extends SpriteEntity {
                          state = "earth";
                          break;
                      case 2:
+                     case 5:
                          state = "wasteland";
                          break;
                      case 3:
@@ -287,6 +331,7 @@ public class SpriteButton extends SpriteEntity {
              case "dust":
                  switch(inputButton) {
                      case 0:
+                     case 5:
                          state = "exploded star";
                          break;
                      case 1:
@@ -312,6 +357,9 @@ public class SpriteButton extends SpriteEntity {
                      case 4:
                          state = "mountains";
                          break;
+                     case 5:
+                         state = "stormy planet";
+                         break;
                  }
                  break;
              case "asteroid":
@@ -320,11 +368,14 @@ public class SpriteButton extends SpriteEntity {
                          state = "desert";
                          break;
                      case 2:
-                         state = "dust";
+                         state = "exploded star";
                          break;
                      case 1:
                      case 3:
                          state = "earth";
+                         break;
+                     case 5:
+                         state = "stormy planet";
                          break;
                  }
                  break;
@@ -337,6 +388,9 @@ public class SpriteButton extends SpriteEntity {
                      case 1:
                      case 3:
                          state = "earth";
+                         break;
+                     case 5:
+                         state = "stormy planet";
                          break;
                  }
                  break;
@@ -355,6 +409,9 @@ public class SpriteButton extends SpriteEntity {
                      case 4:
                          state = "mountains";
                          break;
+                     case 5:
+                         state = "stormy planet";
+                         break;
                  }
                  break;
              case "forest":
@@ -369,6 +426,9 @@ public class SpriteButton extends SpriteEntity {
                      case 4:
                          state = "mountains";
                          break;
+                     case 5:
+                         state = "stormy planet";
+                         break;
                  }
                  break;
              case "ocean planet":
@@ -378,6 +438,7 @@ public class SpriteButton extends SpriteEntity {
                          break;
                      case 0:
                      case 2:
+                     case 5:
                          state = "wasteland";
                          break;
                      case 3:
@@ -395,6 +456,7 @@ public class SpriteButton extends SpriteEntity {
                  switch(inputButton) {
                      case 1:
                      case 2:
+                     case 5:
                          state = "exploded star";
                          break;
                      case 3:
@@ -407,21 +469,32 @@ public class SpriteButton extends SpriteEntity {
              case "desert":
                  switch(inputButton) {
                      case 0:
+                         state = "magma planet";
+                         break;
                      case 1:
-                     case 2:
+                         state = "earth";
+                         break;
                      case 3:
                      case 4:
+                         state = "asteroid";
+                         break;
+                     case 2:
                          state = "wasteland";
+                         break;
+                     case 5:
+                         state = "stormy planet";
                          break;
                  }
                  break;
              case "volcanoes":
                  switch(inputButton) {
-                     case 0:
                      case 1:
+                         state = "asteroid";
+                         break;
+                     case 0:
                      case 2:
-                     case 3:
                      case 4:
+                     case 5:
                          state = "wasteland";
                          break;
                  }
@@ -437,6 +510,9 @@ public class SpriteButton extends SpriteEntity {
                      case 4:
                          state = "mountains";
                          break;
+                     case 5:
+                         state = "stormy planet";
+                         break;
                  }
                  break;
              case "primitive":
@@ -444,8 +520,16 @@ public class SpriteButton extends SpriteEntity {
                      case 0:
                          state = "houses";
                          break;
+                     case 1:
+                     case 2:
+                     case 3:
+                         state = "wasteland";
+                         break;
                      case 4:
-                         state = "desert";
+                         state = "mountains";
+                         break;
+                     case 5:
+                         state = "stormy planet";
                          break;
                  }
                  break;
@@ -454,14 +538,36 @@ public class SpriteButton extends SpriteEntity {
                      case 4:
                         state = "castles";
                         break;
+                     case 5:
+                         state = "stormy planet";
+                         break;
                  }
                  break;
              case "castles":
+                 switch(inputButton) {
+                     case 5:
+                         state = "modern";
+                         break;
+                 }
+                 break;
+             case "modern":
                  break;
          }
 
          /* decide the percentage and description */
          switch(state) {
+             case "modern":
+                 percentage = 100;
+                 description = "Humanity develops modern civilizations! They use electricity to build new machines and advance society. The world is completely populated. Congratulations, Mighty Creator!";
+                 break;
+             case "stormy planet":
+                 percentage = 5;
+                 description = "A planet plagued with storms rages before you! The clouds torment what little life exists there...";
+                 break;
+             case "plasma":
+                 percentage = 0;
+                 description = "A ball of plasma has appeared! It pops and fizzles in the emptiness of space...";
+                 break;
              case "star":
                  percentage = 0;
                  description = "A vibrant star has been born! It's heat radiates out into the cosmos...";
@@ -527,12 +633,12 @@ public class SpriteButton extends SpriteEntity {
                  description = "The planet has high mountain peaks and low valleys. Food sources have depleted, replaced by rocky cliffs...";
                  break;
              case "houses":
-                 percentage = 80;
+                 percentage = 75;
                  description = "Humans have formed primitive cities! They build sturdy structures and live peacefully together...";
                  break;
              case "castles":
-                 percentage = 100;
-                 description = "Humanity develops complex civilizations! They build tall castles and walls around their cities. The world is completely populated. Congratulations, Mighty Creator!";
+                 percentage = 90;
+                 description = "Humanity develops complex civilizations! They build tall castles and walls around their cities...";
                  break;
              case "black hole":
                  percentage = 0;

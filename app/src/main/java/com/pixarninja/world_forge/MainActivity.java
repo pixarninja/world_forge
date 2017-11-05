@@ -1,5 +1,6 @@
 package com.pixarninja.world_forge;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -13,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     SpriteView spriteView;
     LinkedHashMap<String, SpriteController> controllerMap;
     SpriteEntity entity;
-
+    MediaPlayer music;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         /* set bottom view */
         TextView output = (TextView) findViewById(R.id.output);
-        newText = "Welcome to the World Forge! Using the buttons above, you have the power to create new worlds! Create a world abundant with life, Mighty Creator!";
+        newText = "Welcome to the World Forge! Using the buttons above, you have the power to create new worlds! Your goal is to create a world completely populated. Good luck, Mighty Creator!";
         output.setText(newText);
 
         /* width and height are multiplied by the factor the SpriteView is set in comparison to the screen */
@@ -58,42 +59,34 @@ public class MainActivity extends AppCompatActivity {
         controllerMap.put("WorldForgeController", entity.getController());
 
         /* fire button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_fire_off, R.mipmap.button_fire_off, R.mipmap.button_fire_on,
-                0, 0, width / 6, 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button fire", "init");
-        controllerMap.put("FireButtonController", entity.getController());
-
-        /* buttons strip */
-        entity = new SpriteProp(getResources(), 1, width, height, maxRes, maxRes, R.drawable.colored_strip,
-                0, 0, 0, controllerMap.get("FireButtonController").getYPos() - controllerMap.get("FireButtonController").getEntity().getSprite().getSpriteHeight() / 2, 1, 1, 1,
-                1, 1, 0, 0, 1, 1, "loop", "forwards", null, "strip", "init");
-        controllerMap.put("StripController", entity.getController());
-
-        controllerMap.remove("FireButtonController");
-
-        /* fire button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_fire_off, R.mipmap.button_fire_off, R.mipmap.button_fire_on,
-                0, 0, width / 6, 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button fire", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_fire_off, R.mipmap.button_fire_off, R.mipmap.button_fire_on,
+                0, 0, width / 7, 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button fire", "init");
         controllerMap.put("FireButtonController", entity.getController());
 
         /* water button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_water_off, R.mipmap.button_water_off, R.mipmap.button_water_on,
-                0, 0, (2 * width / 6), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button water", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_water_off, R.mipmap.button_water_off, R.mipmap.button_water_on,
+                0, 0, (2 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button water", "init");
         controllerMap.put("WaterButtonController", entity.getController());
 
         /* wood button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_wood_off, R.mipmap.button_wood_off, R.mipmap.button_wood_on,
-                0, 0, (3 * width / 6), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button wood", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_wood_off, R.mipmap.button_wood_off, R.mipmap.button_wood_on,
+                0, 0, (3 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button wood", "init");
         controllerMap.put("WoodButtonController", entity.getController());
 
         /* earth button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_earth_off, R.mipmap.button_earth_off, R.mipmap.button_earth_on,
-                0, 0, (4 * width / 6), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button earth", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_earth_off, R.mipmap.button_earth_off, R.mipmap.button_earth_on,
+                0, 0, (4 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button earth", "init");
         controllerMap.put("EarthButtonController", entity.getController());
 
         /* stone button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_stone_off, R.mipmap.button_stone_off, R.mipmap.button_stone_on,
-                0, 0, (5 * width / 6), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button stone", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_stone_off, R.mipmap.button_stone_off, R.mipmap.button_stone_on,
+                0, 0, (5 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button stone", "init");
         controllerMap.put("StoneButtonController", entity.getController());
+
+        /* electricity button */
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_electricity_off, R.mipmap.button_electricity_off, R.mipmap.button_electricity_on,
+                0, 0, (6 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button stone", "init");
+        controllerMap.put("ElectricityButtonController", entity.getController());
 
         /* set frame rate for all controllers */
         for(LinkedHashMap.Entry<String,SpriteController> controller : controllerMap.entrySet()) {
@@ -154,42 +147,34 @@ public class MainActivity extends AppCompatActivity {
         controllerMap.put("WorldForgeController", entity.getController());
 
         /* fire button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_fire_off, R.mipmap.button_fire_off, R.mipmap.button_fire_on,
-                0, 0, width / 6, 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button fire", "init");
-        controllerMap.put("FireButtonController", entity.getController());
-
-        /* buttons strip */
-        entity = new SpriteProp(getResources(), 1, width, height, maxRes, maxRes, R.drawable.colored_strip,
-                0, 0, 0, controllerMap.get("FireButtonController").getYPos() - controllerMap.get("FireButtonController").getEntity().getSprite().getSpriteHeight() / 2, 1, 1, 1,
-                1, 1, 0, 0, 1, 1, "loop", "forwards", null, "strip", "init");
-        controllerMap.put("StripController", entity.getController());
-
-        controllerMap.remove("FireButtonController");
-
-        /* fire button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_fire_off, R.mipmap.button_fire_off, R.mipmap.button_fire_on,
-                0, 0, width / 6, 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button fire", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_fire_off, R.mipmap.button_fire_off, R.mipmap.button_fire_on,
+                0, 0, width / 7, 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button fire", "init");
         controllerMap.put("FireButtonController", entity.getController());
 
         /* water button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_water_off, R.mipmap.button_water_off, R.mipmap.button_water_on,
-                0, 0, (2 * width / 6), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button water", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_water_off, R.mipmap.button_water_off, R.mipmap.button_water_on,
+                0, 0, (2 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button water", "init");
         controllerMap.put("WaterButtonController", entity.getController());
 
         /* wood button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_wood_off, R.mipmap.button_wood_off, R.mipmap.button_wood_on,
-                0, 0, (3 * width / 6), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button wood", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_wood_off, R.mipmap.button_wood_off, R.mipmap.button_wood_on,
+                0, 0, (3 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button wood", "init");
         controllerMap.put("WoodButtonController", entity.getController());
 
         /* earth button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_earth_off, R.mipmap.button_earth_off, R.mipmap.button_earth_on,
-                0, 0, (4 * width / 6), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button earth", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_earth_off, R.mipmap.button_earth_off, R.mipmap.button_earth_on,
+                0, 0, (4 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button earth", "init");
         controllerMap.put("EarthButtonController", entity.getController());
 
         /* stone button */
-        entity = new SpriteButton(getResources(), 0.15, width, height, maxRes, maxRes, R.mipmap.button_stone_off, R.mipmap.button_stone_off, R.mipmap.button_stone_on,
-                0, 0, (5 * width / 6), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button stone", "init");
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_stone_off, R.mipmap.button_stone_off, R.mipmap.button_stone_on,
+                0, 0, (5 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button stone", "init");
         controllerMap.put("StoneButtonController", entity.getController());
+
+        /* electricity button */
+        entity = new SpriteButton(getResources(), 0.12, width, height, maxRes, maxRes, R.mipmap.button_electricity_off, R.mipmap.button_electricity_off, R.mipmap.button_electricity_on,
+                0, 0, (6 * width / 7), 8.85 * height / 10, 1, 1, 1, 1, 1, 0, 0, 1, 1, "forwards", null, "button stone", "init");
+        controllerMap.put("ElectricityButtonController", entity.getController());
 
         /* set frame rate for all controllers */
         for(LinkedHashMap.Entry<String,SpriteController> controller : controllerMap.entrySet()) {
@@ -214,12 +199,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         spriteView.onResume();
+        music = MediaPlayer.create(MainActivity.this,R.raw.background_music);
+        music.start();
+        music.setLooping(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         spriteView.onPause();
+        music.stop();
     }
 
 }

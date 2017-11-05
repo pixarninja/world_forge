@@ -45,6 +45,90 @@ public class WorldForge extends SpriteEntity {
         int ySpriteRes;
 
         switch (transition) {
+            case "modern":
+                render = new Sprite();
+                render.setTransition(transition);
+                render.setXDimension(xDimension);
+                render.setYDimension(yDimension);
+                render.setLeft(left);
+                render.setTop(top);
+                render.setRight(right);
+                render.setBottom(bottom);
+                render.setXFrameCount(xFrameCount);
+                render.setYFrameCount(yFrameCount);
+                render.setFrameCount(frameCount);
+                render.setMethod(method);
+                render.setDirection(direction);
+                xSpriteRes = xRes * render.getXFrameCount();
+                ySpriteRes = yRes * render.getYFrameCount();
+                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.modern, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
+                render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
+                render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
+                render.setFrameScale((width * spriteScale) / (double)render.getFrameWidth()); // scale = goal width / original width
+                render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale())); // width = original width * scale
+                render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale())); // height = original height * scale
+                render.setXCurrentFrame(0);
+                render.setYCurrentFrame(0);
+                render.setCurrentFrame(0);
+                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
+                render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
+                break;
+            case "stormy planet":
+                render = new Sprite();
+                render.setTransition(transition);
+                render.setXDimension(xDimension);
+                render.setYDimension(yDimension);
+                render.setLeft(left);
+                render.setTop(top);
+                render.setRight(right);
+                render.setBottom(bottom);
+                render.setXFrameCount(xFrameCount);
+                render.setYFrameCount(yFrameCount);
+                render.setFrameCount(frameCount);
+                render.setMethod(method);
+                render.setDirection(direction);
+                xSpriteRes = xRes * render.getXFrameCount();
+                ySpriteRes = yRes * render.getYFrameCount();
+                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.stormy_planet, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
+                render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
+                render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
+                render.setFrameScale((width * spriteScale) / (double)render.getFrameWidth()); // scale = goal width / original width
+                render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale())); // width = original width * scale
+                render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale())); // height = original height * scale
+                render.setXCurrentFrame(0);
+                render.setYCurrentFrame(0);
+                render.setCurrentFrame(0);
+                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
+                render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
+                break;
+            case "plasma":
+                render = new Sprite();
+                render.setTransition(transition);
+                render.setXDimension(xDimension);
+                render.setYDimension(yDimension);
+                render.setLeft(left);
+                render.setTop(top);
+                render.setRight(right);
+                render.setBottom(bottom);
+                render.setXFrameCount(xFrameCount);
+                render.setYFrameCount(yFrameCount);
+                render.setFrameCount(frameCount);
+                render.setMethod(method);
+                render.setDirection(direction);
+                xSpriteRes = xRes * render.getXFrameCount();
+                ySpriteRes = yRes * render.getYFrameCount();
+                render.setSpriteSheet(decodeSampledBitmapFromResource(res, R.mipmap.plasma, (int) (xSpriteRes * spriteScale), (int) (ySpriteRes * spriteScale)));
+                render.setFrameWidth(render.getSpriteSheet().getWidth() / render.getXFrameCount());
+                render.setFrameHeight(render.getSpriteSheet().getHeight() / render.getYFrameCount());
+                render.setFrameScale((width * spriteScale) / (double)render.getFrameWidth()); // scale = goal width / original width
+                render.setSpriteWidth((int)(render.getFrameWidth() * render.getFrameScale())); // width = original width * scale
+                render.setSpriteHeight((int)(render.getFrameHeight() * render.getFrameScale())); // height = original height * scale
+                render.setXCurrentFrame(0);
+                render.setYCurrentFrame(0);
+                render.setCurrentFrame(0);
+                render.setFrameToDraw(new Rect(0, 0, render.getFrameWidth(), render.getFrameHeight()));
+                render.setWhereToDraw(new RectF((float) controller.getXPos(), (float) controller.getYPos(), (float) controller.getXPos() + render.getSpriteWidth(), (float) controller.getYPos() + render.getSpriteHeight()));
+                break;
             case "castles":
                 render = new Sprite();
                 render.setTransition(transition);

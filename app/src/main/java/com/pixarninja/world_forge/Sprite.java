@@ -28,8 +28,8 @@ public class Sprite {
     double right;
     double bottom;
     private RectF boundingBox;
-    private String direction;
-    private String method;
+    private String direction = "forwards";
+    private String method = "loop";
 
 
     public Sprite() {}

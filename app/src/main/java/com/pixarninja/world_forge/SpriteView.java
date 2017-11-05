@@ -97,6 +97,7 @@ public class SpriteView extends SurfaceView {
             }
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 boolean retry = true;
